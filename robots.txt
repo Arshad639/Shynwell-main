@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shynwell.vercel.app/index.html/sitemap.xml
