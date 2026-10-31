@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHYNWELL - Premium Covering Jewellery</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{--bg:#0a0a0f;--em:#00ff88;--cy:#00e5ff;--gd:#ffb703;--vi:#a855f7;--txt:#e8ecf4;--mut:#8a93a6}
+*{-webkit-tap-highlight-color:transparent}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(600px 400px at 10% 0%,rgba(0,255,136,.12),transparent),
+ radial-gradient(700px 500px at 100% 20%,rgba(168,85,247,.14),transparent),
+ radial-gradient(600px 500px at 50% 110%,rgba(0,229,255,.12),transparent);animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(-2%,2%) scale(1.06)}}
+.serif{font-family:'Cinzel',serif}
+.metal{background:linear-gradient(100deg,#fff 0%,var(--gd) 25%,var(--em) 50%,var(--cy) 75%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite;filter:drop-shadow(0 0 18px rgba(0,255,136,.35))}
+@keyframes shine{to{background-position:-250% 0}}
+.glass{background:rgba(255,255,255,.04);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);border-radius:18px}
+.neon{position:relative;box-shadow:0 0 25px rgba(0,255,136,.12),inset 0 0 0 1px rgba(0,255,136,.25)}
+.neon:after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(120deg,var(--em),var(--cy),var(--vi),var(--gd),var(--em));background-size:300% 300%;animation:flow 6s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.7}
+@keyframes flow{to{background-position:300% 300%}}
+.float{animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.pulse-glow{animation:pg 2.4s ease-in-out infinite}
+@keyframes pg{50%{box-shadow:0 0 34px rgba(0,255,136,.55)}}
+.inp{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:.65rem .8rem;color:var(--txt);outline:none;transition:.25s;font-size:.95rem}
+.inp:focus{border-color:var(--em);box-shadow:0 0 0 3px rgba(0,255,136,.15),0 0 18px rgba(0,255,136,.25)}
+.inp option{background:#12121a}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.otp{font-size:1.7rem;letter-spacing:.55em;font-weight:600;color:var(--em);text-shadow:0 0 12px rgba(0,255,136,.6);animation:pg 2.4s ease-in-out infinite}
+.lbl{display:block;font-size:.75rem;color:var(--mut);margin-bottom:.3rem;letter-spacing:.03em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border-radius:12px;padding:.7rem 1.2rem;font-weight:600;color:#04120b;background:linear-gradient(120deg,var(--em),var(--cy));transition:.25s;cursor:pointer;border:0}
+.btn:hover,.btn:active{transform:translateY(-2px) scale(1.04);box-shadow:0 0 28px rgba(0,255,136,.55)}
+.btn-gold{background:linear-gradient(120deg,var(--gd),#ff8c42);box-shadow:0 0 0 rgba(255,183,3,0)}
+.btn-gold:hover,.btn-gold:active{box-shadow:0 0 28px rgba(255,183,3,.6)}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid rgba(255,255,255,.18)}
+.btn-ghost:hover{box-shadow:0 0 22px rgba(0,229,255,.4);border-color:var(--cy)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .9rem;border-radius:999px;font-size:.85rem;font-weight:600;color:#1a1100;background:linear-gradient(110deg,#ffb703,#fff2c4,#ffb703);background-size:200% 100%;animation:shine2 3s linear infinite;box-shadow:0 0 20px rgba(255,183,3,.45)}
+@keyframes shine2{to{background-position:-200% 0}}
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)}
+.modal.show{display:flex;animation:fi .25s}
+.modal.show>div{animation:sc .3s cubic-bezier(.2,1.2,.4,1)}
+@keyframes fi{from{opacity:0}}@keyframes sc{from{opacity:0;transform:scale(.88)}}
+.rise{animation:rise .6s cubic-bezier(.2,.9,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+#drawer{position:fixed;top:0;right:0;height:100%;width:min(430px,100%);z-index:70;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);display:flex;flex-direction:column;background:rgba(10,10,15,.94);backdrop-filter:blur(18px);border-left:1px solid rgba(0,255,136,.35);box-shadow:-10px 0 40px rgba(0,255,136,.12)}
+#drawer.open{transform:none}
+.bub{max-width:92%;padding:.6rem .85rem;border-radius:14px;font-size:.9rem;line-height:1.45;animation:rise .3s both}
+.bot{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);align-self:flex-start}
+.me{background:linear-gradient(120deg,rgba(0,255,136,.25),rgba(0,229,255,.25));align-self:flex-end}
+.bub b{color:var(--em)}.bub i.tip{color:var(--gd);font-style:normal}
+.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--em);animation:bl 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bl{50%{opacity:.2;transform:translateY(-3px)}}
+.chip{font-size:.72rem;padding:.3rem .65rem;border-radius:999px;border:1px solid rgba(0,229,255,.4);color:var(--cy);background:rgba(0,229,255,.06);transition:.2s;cursor:pointer}
+.chip:hover{background:rgba(0,229,255,.2);box-shadow:0 0 14px rgba(0,229,255,.4)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);z-index:100;padding:.7rem 1.1rem;border-radius:12px;background:#12121a;border:1px solid var(--em);transition:.35s;max-width:92vw;font-size:.9rem}
+#toast.show{transform:translate(-50%,0)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.35);border-radius:9px}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+html,body{overflow-x:hidden;max-width:100%}
+main>section,.attcard{min-width:0;max-width:100%}
+.attcard{overflow:hidden}
+.attname{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.attthumb{flex:0 0 3.5rem;width:3.5rem;height:3.5rem}
+.navbtn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;height:40px;min-width:40px;padding:0 .85rem;border-radius:12px;font-size:.875rem;font-weight:600;line-height:1;color:var(--txt);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);cursor:pointer;transition:.2s;white-space:nowrap}
+.navbtn i{font-size:1rem;width:1rem;text-align:center}
+.navbtn:hover{border-color:var(--cy);box-shadow:0 0 16px rgba(0,229,255,.3)}
+.navbtn.active{color:#04120b;background:linear-gradient(120deg,var(--em),var(--cy));border-color:transparent}
+.navbtn .lbl2{display:none}
+@media(min-width:640px){.navbtn .lbl2{display:inline}}
+@media(max-width:639px){.navbtn{padding:0;width:40px}}
+.popmenu{display:none;position:absolute;right:0;top:calc(100% + 8px);min-width:220px;z-index:70;padding:.35rem;border-radius:14px;background:#0e0e16;border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.popmenu.left{left:0;right:auto}
+.popmenu.show{display:block;animation:fi .15s}
+.popmenu button{display:flex;align-items:center;gap:.65rem;width:100%;text-align:left;padding:.7rem .8rem;border-radius:10px;font-size:.875rem;color:var(--txt);cursor:pointer}
+.popmenu button:hover{background:rgba(0,229,255,.12)}
+.popmenu button i{width:1rem;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<section id="loginView" class="min-h-screen flex flex-col items-center justify-center px-4 py-10 text-center">
+  <div class="float text-5xl mb-3" style="color:var(--gd);filter:drop-shadow(0 0 16px rgba(255,183,3,.7))"><i class="fa-regular fa-gem"></i></div>
+  <h1 class="serif metal text-5xl sm:text-7xl font-extrabold tracking-wider">SHYNWELL</h1>
+  <p class="mt-2 text-lg sm:text-xl" style="color:var(--mut)">Welcome to SHYNWELL - Premium Covering Jewellery</p>
+  <div class="badge mt-5"><i class="fa-solid fa-circle-check"></i>ARSHAD &mdash; Founder &amp; Owner</div>
+
+  <form id="loginForm" class="glass neon w-full max-w-sm mt-9 p-6 text-left rise" autocomplete="on">
+    <h2 class="serif text-xl mb-4">Owner sign in</h2>
+    <label class="lbl" for="lu">Username</label>
+    <input id="lu" class="inp mb-3" autocomplete="username" required>
+    <label class="lbl" for="lp">Password</label>
+    <div class="relative mb-2"><input id="lp" type="password" class="inp pr-10" autocomplete="current-password" required>
+      <button type="button" class="absolute right-3 top-3 text-gray-400" onclick="lp.type=lp.type==='password'?'text':'password'" aria-label="Show password"><i class="fa-regular fa-eye"></i></button></div>
+    <p id="lerr" class="text-sm h-5" style="color:#ff6b81"></p>
+    <button class="btn pulse-glow w-full mt-1"><i class="fa-solid fa-unlock-keyhole"></i>Enter dashboard</button>
+    <button type="button" onclick="openForgot()" class="mt-4 text-sm underline" style="color:var(--cy)">Forgot password?</button>
+  </form>
+</section>
+
+<div id="forgotModal" class="modal"><div class="glass neon w-full max-w-sm p-6" style="background:#0e0e16">
+  <div class="flex items-center justify-between mb-3"><h3 class="serif text-xl">Recover access</h3><button onclick="closeForgot()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <div id="fs1">
+    <div class="text-center py-3"><div class="text-4xl float mb-2" style="color:var(--cy)"><i class="fa-solid fa-envelope-circle-check"></i></div>
+      <p class="text-sm" style="color:var(--mut)">Send OTP to registered email</p><p class="font-semibold" style="color:var(--em)">aarshath255@gmail.com</p></div>
+    <button id="sendBtn" class="btn pulse-glow w-full mt-2" onclick="sendOtp()"><i class="fa-solid fa-paper-plane"></i>Send OTP</button>
+  </div>
+  <div id="fs2" class="hidden">
+    <p id="otpSent" class="text-sm text-center" style="color:var(--mut)"></p>
+    <input id="otpIn" class="inp otp text-center my-4" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="------" oninput="otpInput()" aria-label="6-digit OTP">
+    <p class="text-center text-sm">Expires in <b id="otpTime" style="color:var(--gd)">05:00</b></p>
+    <button id="verBtn" class="btn w-full mt-3" onclick="verifyOtp()"><i class="fa-solid fa-shield-halved"></i>Verify OTP</button>
+    <button id="resBtn" class="btn btn-ghost w-full mt-2" onclick="sendOtp()" disabled>Resend OTP</button>
+  </div>
+  <div id="fs3" class="hidden text-center">
+    <div class="text-4xl mb-2" style="color:var(--em)"><i class="fa-solid fa-circle-check"></i></div>
+    <p class="text-sm mb-3" style="color:var(--mut)">Identity verified. Your credentials:</p>
+    <div class="glass p-3 text-left text-sm mb-4"><p>Username: <b id="cU" style="color:var(--gd)"></b></p><p>Password: <b id="cP" style="color:var(--gd)"></b></p></div>
+    <button class="btn w-full" onclick="loginWithCreds()"><i class="fa-solid fa-unlock-keyhole"></i>Log in now</button>
+  </div>
+  <p id="fmsg" class="text-sm mt-3 text-center" style="min-height:1.25rem"></p>
+</div></div>
+
+<div id="connModal" class="modal"><div class="glass neon w-full max-w-md p-6" style="background:#0e0e16">
+  <h3 class="serif text-xl mb-2">Connect Google Sheet</h3>
+  <p class="text-sm mb-3" style="color:var(--mut)">Paste your Apps Script Web App URL (it must end in <b>/exec</b>). Leave empty to use local demo mode.</p>
+  <input id="urlIn" class="inp mb-3" placeholder="https://script.google.com/macros/s/.../exec">
+  <div class="flex gap-2"><button class="btn flex-1" onclick="saveUrl()">Save &amp; test</button><button class="btn btn-ghost" onclick="closeM('connModal')">Close</button></div>
+  <div class="flex gap-2 mt-2"><button class="btn btn-ghost flex-1 text-sm" onclick="resetUrl()">Use default URL</button><button class="btn btn-ghost flex-1 text-sm" onclick="runDiag()"><i class="fa-solid fa-stethoscope"></i>Run diagnostics</button></div>
+  <p id="connMsg" class="text-sm mt-3"></p>
+  <pre id="diagOut" class="hidden text-xs mt-3 p-3 rounded-xl overflow-x-auto whitespace-pre-wrap break-words" style="background:rgba(0,0,0,.5);max-height:50vh;overflow-y:auto"></pre>
+</div></div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="appView" class="hidden">
+<nav class="sticky top-0 z-50 glass" style="border-radius:0;border-width:0 0 1px 0">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <div class="serif metal text-xl sm:text-2xl font-extrabold tracking-widest"><i class="fa-regular fa-gem mr-2" style="color:var(--gd)"></i>SHYNWELL</div>
+    <div class="flex items-center gap-2" role="navigation" aria-label="Main">
+      <button id="navBill" class="navbtn active" onclick="showView('bill')" aria-label="New Order" title="New Order"><i class="fa-solid fa-file-invoice-dollar"></i><span class="lbl2">New Order</span></button>
+      <button id="navInv" class="navbtn" onclick="showView('inv')" aria-label="Inventory" title="Inventory"><i class="fa-solid fa-boxes-stacked"></i><span class="lbl2">Inventory</span></button>
+      <div class="relative">
+        <button id="navLinkBtn" class="navbtn" onclick="toggleNavMenu(event)" aria-haspopup="true" aria-expanded="false" aria-label="Google Sheets" title="Google Sheets"><i class="fa-solid fa-link"></i></button>
+        <div id="navMenu" class="popmenu" role="menu">
+          <button role="menuitem" onclick="navMenuGo('inv')"><i class="fa-solid fa-table-list" style="color:var(--gd)"></i><span><b>Inventory Google Sheet</b><br><span class="text-xs" style="color:var(--mut)">Default</span></span></button>
+          <button role="menuitem" onclick="navMenuGo('db')"><i class="fa-solid fa-database" style="color:var(--cy)"></i><span><b>Database Google Sheet</b></span></button>
+          <button role="menuitem" onclick="navMenuGo('sync')"><i class="fa-solid fa-arrows-rotate" style="color:var(--em)"></i><span><b>Data Sync / Cloud Bridge</b><br><span class="text-xs" style="color:var(--mut)">Supabase &#8596; Google Sheets</span></span></button>
+        </div>
+      </div>
+      <button class="navbtn" onclick="logout()" aria-label="Logout" title="Logout"><i class="fa-solid fa-right-from-bracket"></i><span class="lbl2">Logout</span></button>
+    </div>
+  </div>
+</nav>
+
+<datalist id="skuList"></datalist>
+<main id="billMain" class="max-w-6xl mx-auto p-4 grid grid-cols-1 gap-5 lg:grid-cols-5 pb-28">
+  <!-- Section A -->
+  <section class="glass neon p-5 lg:col-span-3 rise">
+    <h2 class="serif text-2xl mb-4">New order</h2>
+
+    <div class="rounded-2xl p-4 mb-5" style="border:1px dashed rgba(0,229,255,.5);background:rgba(0,229,255,.04)">
+      <p class="font-semibold mb-1"><i class="fa-solid fa-file-invoice mr-2" style="color:var(--cy)"></i>Invoice scanner <span class="text-xs font-normal" style="color:var(--mut)">(optional)</span></p>
+      <p class="text-xs mb-3" style="color:var(--mut)">Details fill in automatically and every field stays editable.</p>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="btn cursor-pointer text-sm text-center"><i class="fa-solid fa-camera"></i>Snap Invoice via Camera
+          <input id="camIn" type="file" accept="image/*" capture="environment" class="hidden"></label>
+        <label class="btn btn-gold cursor-pointer text-sm text-center"><i class="fa-solid fa-folder-open"></i>Browse Device / PDF
+          <input id="fileIn" type="file" accept="image/*,application/pdf" class="hidden"></label>
+      </div>
+      <div id="prev" class="hidden mt-4 flex items-center gap-3 p-3 rounded-xl" style="background:rgba(0,0,0,.4)">
+        <img id="prevImg" class="w-20 h-20 object-cover rounded-lg hidden" alt="Invoice preview">
+        <div id="prevPdf" class="w-20 h-20 rounded-lg hidden items-center justify-center text-4xl" style="background:rgba(255,107,129,.12);color:#ff6b81"><i class="fa-solid fa-file-pdf"></i></div>
+        <div class="flex-1 min-w-0"><p id="prevName" class="text-sm truncate"></p><p id="prevSize" class="text-xs" style="color:var(--mut)"></p><p id="scanMsg" class="text-xs mt-1" style="color:var(--cy)"></p><details class="mt-1 text-xs" style="color:var(--mut)"><summary class="cursor-pointer">Show scanned text</summary><pre id="ocrRaw" class="whitespace-pre-wrap max-h-32 overflow-auto mt-1"></pre></details></div>
+        <div class="flex flex-col gap-2"><button class="btn !py-1.5 !px-3 text-sm" onclick="parseFile()"><i class="fa-solid fa-wand-magic-sparkles"></i>Read</button><button class="btn btn-ghost !py-1 !px-3 text-xs" onclick="clearPrev()">Clear</button></div>
+      </div>
+    </div>
+
+    <form id="orderForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div><label class="lbl">Platform</label>
+        <select id="platform" class="inp" onchange="otherBox()"><option>Amazon</option><option>Meesho</option><option>Flipkart</option><option>Others</option></select>
+        <input id="platformOther" class="inp mt-2 hidden" placeholder="Specify platform"></div>
+      <div><label class="lbl">Order ID</label><input id="orderId" class="inp" required><p id="orderIdMsg" class="text-xs mt-1" style="color:#ff6b81"></p></div>
+      <div><label class="lbl">Customer name</label><input id="customerName" class="inp" required></div>
+      <div><label class="lbl">State</label><input id="state" class="inp"></div>
+      <div class="sm:col-span-2"><label class="lbl">Full delivery address</label><textarea id="address" rows="2" class="inp"></textarea></div>
+      <div><label class="lbl">Invoice date</label><input id="invoiceDate" type="date" class="inp"></div>
+      <div><label class="lbl">Shipping date</label><input id="shippingDate" type="date" class="inp"></div>
+      <div><label class="lbl">SKU ID</label><input id="skuId" class="inp" autocomplete="off">
+        <p class="text-xs mt-1" style="color:var(--mut)">Reference only &ndash; never changes inventory stock.</p>
+        <div id="secSkuBox" class="mt-3 rounded-xl p-3" style="border:1px dashed rgba(168,85,247,.45);background:rgba(168,85,247,.04)">
+          <p class="lbl !mb-1">Secondary SKU IDs <span style="opacity:.7">(optional)</span></p>
+          <p class="text-xs mb-2" style="color:var(--mut)">Inventory stock is reduced only for these.</p>
+          <div id="secSkuList" class="flex flex-col gap-2"></div>
+          <button type="button" class="btn btn-ghost !py-1.5 !px-3 text-xs mt-2" onclick="addSecSku()">+ Add Another SKU ID</button>
+        </div></div>
+      <div><label class="lbl">Payment type</label>
+        <div class="flex gap-5 pt-2 text-sm"><label><input type="radio" name="pay" value="COD" checked> COD</label><label><input type="radio" name="pay" value="Prepaid"> Prepaid</label></div></div>
+      <div class="sm:col-span-2"><label class="lbl">Customer price (Rs)</label><input id="customerPrice" type="number" step="0.01" class="inp"></div>
+      <div class="sm:col-span-2 grid grid-cols-3 gap-3">
+        <div><label class="lbl">CGST</label><input id="cgst" type="number" step="0.01" class="inp"></div>
+        <div><label class="lbl">SGST</label><input id="sgst" type="number" step="0.01" class="inp"></div>
+        <div><label class="lbl">IGST</label><input id="igst" type="number" step="0.01" class="inp"></div>
+      </div>
+      <div><label class="lbl">Original cost price (Rs) *</label><input id="originalPrice" type="number" step="0.01" class="inp" required oninput="liveA()"></div>
+      <div><label class="lbl">Sale price (Rs) *</label><input id="salePrice" type="number" step="0.01" class="inp" required oninput="liveA()"></div>
+      <p class="sm:col-span-2 text-sm" style="color:var(--mut)">Expected profit: <b id="liveA" style="color:var(--em)">Rs 0.00</b></p>
+      <div class="sm:col-span-2"><label class="lbl">Others / important notes</label><textarea id="notes" rows="2" class="inp"></textarea></div>
+      <!-- Attachments (Supabase Storage + DB) -->
+      <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-0">
+        <div class="attcard rounded-2xl p-4" style="border:1px dashed rgba(255,183,3,.5);background:rgba(255,183,3,.04)">
+          <p class="font-semibold mb-1 text-sm"><i class="fa-solid fa-file-invoice-dollar mr-2" style="color:var(--gd)"></i>Invoice file *</p>
+          <p class="text-xs mb-3" style="color:var(--mut)">PDF or image</p>
+          <label class="btn btn-gold cursor-pointer text-sm w-full"><i class="fa-solid fa-paperclip"></i>Choose invoice
+            <input id="invFileIn" type="file" accept=".pdf,application/pdf,image/*" class="hidden"></label>
+          <div id="attInvBox" class="hidden mt-3 flex items-center gap-3 p-2 rounded-xl min-w-0 max-w-full overflow-hidden" style="background:rgba(0,0,0,.4)">
+            <img id="attInvImg" class="attthumb object-cover rounded-lg hidden" alt="invoice thumbnail">
+            <div id="attInvPdf" class="attthumb rounded-lg hidden items-center justify-center text-2xl" style="background:rgba(255,107,129,.12);color:#ff6b81"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="flex-1 min-w-0"><span id="attInvName" class="attname text-xs"></span><span id="attInvMeta" class="attname text-xs" style="color:var(--mut)"></span></div>
+            <button type="button" class="text-lg flex-none" aria-label="Remove invoice" onclick="clearAtt('inv')"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <div class="attcard rounded-2xl p-4" style="border:1px dashed rgba(0,229,255,.5);background:rgba(0,229,255,.04)">
+          <p class="font-semibold mb-1 text-sm"><i class="fa-solid fa-box-open mr-2" style="color:var(--cy)"></i>Packing parcel *</p>
+          <p class="text-xs mb-3" style="color:var(--mut)">Photo or PDF - from files or live camera</p>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="btn btn-ghost cursor-pointer text-sm"><i class="fa-solid fa-images"></i>Files
+              <input id="packGalIn" type="file" accept=".pdf,application/pdf,image/*" class="hidden"></label>
+            <label class="btn cursor-pointer text-sm"><i class="fa-solid fa-camera"></i>Camera
+              <input id="packCamIn" type="file" accept="image/*" capture="environment" class="hidden"></label>
+          </div>
+          <div id="attPackBox" class="hidden mt-3 flex items-center gap-3 p-2 rounded-xl min-w-0 max-w-full overflow-hidden" style="background:rgba(0,0,0,.4)">
+            <img id="attPackImg" class="attthumb object-cover rounded-lg hidden" alt="packing file thumbnail">
+            <div id="attPackPdf" class="attthumb rounded-lg hidden items-center justify-center text-2xl" style="background:rgba(255,107,129,.12);color:#ff6b81"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="flex-1 min-w-0"><span id="attPackName" class="attname text-xs"></span><span id="attPackMeta" class="attname text-xs" style="color:var(--mut)"></span></div>
+            <button type="button" class="text-lg flex-none" aria-label="Remove packing file" onclick="clearAtt('pack')"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="sm:col-span-2"><button id="saveBtn" class="btn btn-gold w-full sm:w-auto"><i id="saveIco" class="fa-solid fa-cloud-arrow-up"></i><span id="saveTxt">Save order</span></button></div>
+    </form>
+  </section>
+
+  <!-- Section B -->
+  <section class="glass neon p-5 lg:col-span-2 self-start rise" style="animation-delay:.12s">
+    <h2 class="serif text-2xl mb-4">Order lookup</h2>
+    <div class="flex gap-2"><input id="searchId" class="inp" placeholder="Enter Order ID" onkeydown="if(event.key==='Enter')searchOrder()"><button class="btn" onclick="searchOrder()"><i class="fa-solid fa-magnifying-glass"></i></button></div>
+    <p id="lookMsg" class="text-sm mt-2" style="color:var(--mut)"></p>
+    <div id="lookBox" class="hidden mt-4">
+      <div id="lookInfo" class="text-sm rounded-xl p-3 mb-3 leading-relaxed break-words" style="background:rgba(0,0,0,.4)"></div>
+      <div id="lookLinks" class="hidden flex gap-2 mb-3 text-xs"></div>
+      <div id="lookSkus" class="hidden text-xs mb-3 break-words" style="color:var(--cy)"></div>
+      <details id="lookDetails" class="mb-3 rounded-xl p-3" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1)">
+        <summary class="cursor-pointer text-sm font-semibold" style="color:var(--cy)"><i class="fa-solid fa-pen-to-square mr-2"></i>View all / edit details</summary>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+          <div class="col-span-2"><label class="lbl">Order ID</label><input id="eOrderId" class="inp"></div>
+          <div class="col-span-2"><label class="lbl">Customer name</label><input id="eCust" class="inp"></div>
+          <div><label class="lbl">State</label><input id="eState" class="inp"></div>
+          <div><label class="lbl">SKU ID</label><input id="eSku" class="inp"></div>
+          <div class="col-span-2"><label class="lbl">Address</label><textarea id="eAddr" rows="2" class="inp"></textarea></div>
+          <div><label class="lbl">Invoice date</label><input id="eInvDate" type="date" class="inp"></div>
+          <div><label class="lbl">Shipping date</label><input id="eShipDate" type="date" class="inp"></div>
+          <div class="col-span-2"><label class="lbl">Customer price (Rs)</label><input id="ePrice" type="number" step="0.01" class="inp"></div>
+          <div><label class="lbl">CGST</label><input id="eCgst" type="number" step="0.01" class="inp"></div>
+          <div><label class="lbl">SGST</label><input id="eSgst" type="number" step="0.01" class="inp"></div>
+          <div class="col-span-2"><label class="lbl">IGST</label><input id="eIgst" type="number" step="0.01" class="inp"></div>
+          <div class="col-span-2"><label class="lbl">Notes</label><textarea id="eNotes" rows="2" class="inp"></textarea></div>
+        </div>
+      </details>
+      <div class="grid grid-cols-3 gap-2">
+        <div><label class="lbl">Original</label><input id="uOrig" type="number" step="0.01" class="inp" oninput="liveB()"></div>
+        <div><label class="lbl">Sale</label><input id="uSale" type="number" step="0.01" class="inp"></div>
+        <div><label class="lbl">Credited</label><input id="uCred" type="number" step="0.01" class="inp" oninput="liveB()"></div>
+      </div>
+      <p class="mt-4 text-sm" style="color:var(--mut)">Net profit (Credited - Original)</p>
+      <p id="liveB" class="serif text-3xl font-bold" style="color:var(--em);text-shadow:0 0 18px currentColor">Rs 0.00</p>
+      <div id="rcBox" class="mt-4 rounded-xl p-3" style="border:1px dashed rgba(255,107,129,.45);background:rgba(255,107,129,.04)">
+        <p class="font-semibold text-sm mb-3"><i class="fa-solid fa-rotate-left mr-2" style="color:#ff6b81"></i>Return / cancellation</p>
+        <label class="lbl" for="rcStatus">Order status</label>
+        <select id="rcStatus" class="inp" onchange="rcToggle()">
+          <option value="">Normal order (no return / cancellation)</option>
+          <option value="Cancel">Cancel</option>
+          <option value="RTO">RTO (Return to Origin)</option>
+          <option value="Customer Return">Customer Return</option>
+        </select>
+        <div id="rcReasonBox" class="hidden mt-3">
+          <label class="lbl" for="rcReason">Cancellation reason <span style="color:#ff6b81">*</span></label>
+          <select id="rcReason" class="inp" onchange="rcToggle()">
+            <option value="">Select a reason</option>
+            <option value="Seller Issue">Seller Issue</option>
+            <option value="Pickup Associate Issue">Pickup Associate Issue</option>
+            <option value="Others">Others</option>
+          </select>
+          <input id="rcOther" class="inp mt-2 hidden" maxlength="120" placeholder="Please specify reason" autocomplete="off">
+        </div>
+        <div id="rcLossBox" class="hidden mt-3">
+          <label class="lbl" for="rcLoss">Loss Amount (&#8377;)</label>
+          <input id="rcLoss" type="number" min="0" step="0.01" inputmode="decimal" class="inp" placeholder="0.00">
+          <p class="text-xs mt-1" style="color:var(--mut)">e.g. packaging cost, reverse shipping fee or damaged item cost. Leave empty for 0.</p>
+        </div>
+        <p id="rcErr" class="text-xs mt-2" style="color:#ff6b81"></p>
+      </div>
+      <button id="updBtn" class="btn btn-gold w-full mt-4" onclick="updateOrder()"><i id="updIco" class="fa-solid fa-floppy-disk"></i><span id="updTxt">Save / update changes</span></button>
+      <button id="delBtn" class="btn w-full mt-3" style="background:linear-gradient(135deg,#ff2d55,#c1121f);color:#fff" onclick="deleteOrder()"><i id="delIco" class="fa-solid fa-trash"></i><span id="delTxt">Delete Order</span></button>
+    </div>
+  </section>
+</main>
+
+<!-- ================= INVENTORY ================= -->
+<main id="invMain" class="hidden max-w-6xl mx-auto p-4 pb-28">
+  <section class="glass neon p-5 rise">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <h2 class="serif text-2xl"><i class="fa-solid fa-boxes-stacked mr-2" style="color:var(--gd)"></i>Inventory</h2>
+      <button class="btn text-sm" onclick="invOpenAdd()"><i class="fa-solid fa-plus"></i>Add Inventory Item</button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+      <input id="invSearch" class="inp sm:col-span-2" placeholder="Search by SKU ID..." oninput="invRender()" autocomplete="off">
+      <div id="invCount" class="text-sm self-center" style="color:var(--mut)"></div>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-2">
+      <div class="relative">
+        <button id="invDlBtn" class="btn btn-gold text-sm" onclick="invTogglePop('invDlPop', event)" aria-haspopup="true"><i class="fa-solid fa-download"></i>Download<i class="fa-solid fa-chevron-down" style="font-size:.7rem"></i></button>
+        <div id="invDlPop" class="popmenu left" role="menu">
+          <button role="menuitem" onclick="invDownload('stock')"><i class="fa-solid fa-boxes-stacked" style="color:var(--em)"></i>Stock Report</button>
+          <button role="menuitem" onclick="invDownload('moves')"><i class="fa-solid fa-clock-rotate-left" style="color:var(--cy)"></i>Stock Movement</button>
+        </div>
+      </div>
+      <div class="relative">
+        <button id="invDelBtn" class="btn text-sm" style="background:linear-gradient(135deg,#ff2d55,#c1121f);color:#fff" onclick="invTogglePop('invDelPop', event)" aria-haspopup="true"><i class="fa-solid fa-trash"></i>Delete<i class="fa-solid fa-chevron-down" style="font-size:.7rem"></i></button>
+        <div id="invDelPop" class="popmenu left" role="menu">
+          <button role="menuitem" onclick="invDeleteData('stock')"><i class="fa-solid fa-boxes-stacked" style="color:#ff6b81"></i>Stock Report</button>
+          <button role="menuitem" onclick="invDeleteData('moves')"><i class="fa-solid fa-clock-rotate-left" style="color:#ff6b81"></i>Stock Movement</button>
+        </div>
+      </div>
+    </div>
+    <label class="text-xs flex items-center gap-2 mb-4" style="color:var(--mut)"><input type="checkbox" id="invFilteredOnly"> Export only the rows matching my search (otherwise everything is exported)</label>
+    <div class="flex flex-wrap items-center gap-2 text-xs mb-3"><i class="fa-solid fa-table-list" style="color:var(--gd)"></i><span id="invSheetMsg" style="color:var(--mut)">Inventory sheet: connect it with the table icon in the top bar.</span><button class="chip" onclick="invMirrorNow(true)">Copy to sheet now</button></div>
+    <div class="overflow-x-auto rounded-xl" style="border:1px solid rgba(255,255,255,.1)">
+      <table class="w-full text-sm" style="min-width:600px">
+        <thead><tr style="background:rgba(255,255,255,.05);color:var(--mut)" class="text-left text-xs">
+          <th class="p-3">S.No</th><th class="p-3">SKU ID</th><th class="p-3">Stock</th><th class="p-3">Image</th><th class="p-3">Actions</th></tr></thead>
+        <tbody id="invBody"></tbody>
+      </table>
+    </div>
+    <p id="invMsg" class="text-sm mt-3" style="color:var(--mut)"></p>
+  </section>
+</main>
+<input id="invImgIn" type="file" accept="image/*" class="hidden">
+
+<div id="invItemModal" class="modal"><div class="glass neon w-full max-w-md p-6" style="background:#0e0e16">
+  <h3 class="serif text-xl mb-3">Add Inventory Item</h3>
+  <label class="lbl">SKU ID</label><input id="invNewSku" class="inp mb-3" maxlength="64" autocomplete="off">
+  <label class="lbl">Opening stock quantity</label><input id="invNewQty" type="number" min="0" step="1" inputmode="numeric" class="inp mb-2" value="0">
+  <p id="invItemErr" class="text-sm mb-3" style="color:#ff6b81"></p>
+  <div class="flex gap-2"><button id="invItemBtn" class="btn flex-1" onclick="invSaveItem()">Save item</button><button class="btn btn-ghost" onclick="closeM('invItemModal')">Cancel</button></div>
+</div></div>
+
+<div id="invStockModal" class="modal"><div class="glass neon w-full max-w-md p-6" style="background:#0e0e16">
+  <h3 class="serif text-xl mb-1">Edit stock</h3><p id="invStockSku" class="text-sm mb-3" style="color:var(--gd)"></p>
+  <label class="lbl">New stock quantity</label><input id="invStockQty" type="number" min="0" step="1" inputmode="numeric" class="inp mb-3">
+  <label class="lbl">Note (optional)</label><input id="invStockNote" class="inp mb-2" maxlength="120" placeholder="e.g. new stock received">
+  <p id="invStockErr" class="text-sm mb-3" style="color:#ff6b81"></p>
+  <div class="flex gap-2"><button id="invStockBtn" class="btn flex-1" onclick="invSaveStock()">Save stock</button><button class="btn btn-ghost" onclick="closeM('invStockModal')">Cancel</button></div>
+</div></div>
+
+<div id="invConnModal" class="modal"><div class="glass neon w-full max-w-md p-6" style="background:#0e0e16;max-height:92vh;overflow-y:auto">
+  <div class="flex items-center justify-between mb-3"><h3 class="serif text-xl">Connect Google Sheet &ndash; Inventory</h3><button onclick="closeM('invConnModal')" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <div id="icA" class="hidden">
+    <p class="text-sm mb-3" style="color:var(--mut)">Paste the Web App URL of your inventory Apps Script (it must end in <b>/exec</b>). This is separate from your billing sheet.</p>
+    <input id="icUrl" class="inp mb-3" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+    <button class="btn w-full" onclick="invSaveUrl()">Save &amp; test</button>
+  </div>
+  <div id="icC" class="hidden">
+    <p id="icInfo" class="text-sm mb-3" style="color:var(--em)"></p>
+    <div class="grid grid-cols-1 gap-2">
+      <button class="btn btn-gold text-sm" onclick="invSyncToSheet()"><i class="fa-solid fa-cloud-arrow-up"></i>Replace sheet with app inventory (exact copy)</button>
+      <button class="btn text-sm" onclick="invSyncFromSheet()"><i class="fa-solid fa-cloud-arrow-down"></i>Sync Inventory Sheet &rarr; App</button>
+      <button class="btn btn-ghost text-sm" onclick="invOpenSheet()"><i class="fa-solid fa-table"></i>Get link to the inventory sheet</button>
+      <div id="icLinkBox" class="text-sm text-center"></div>
+      <button class="btn btn-ghost text-sm" onclick="invTest()"><i class="fa-solid fa-stethoscope"></i>Test connection</button>
+    </div>
+    <p class="text-xs mt-3" style="color:var(--mut)">App changes are copied to the sheet automatically. Rows you type only in the sheet stay there until you run &ldquo;Sync Inventory Sheet &rarr; App&rdquo;.</p>
+    <button type="button" class="mt-2 text-xs underline" style="color:var(--cy)" onclick="invChangeUrl()">Change script URL</button>
+  </div>
+  <p id="invConnMsg" class="text-sm mt-3" style="color:var(--mut);min-height:1.25rem"></p>
+</div></div>
+
+<div id="syncModal" class="modal"><div class="glass neon w-full max-w-md p-6" style="background:#0e0e16;max-height:92vh;overflow-y:auto">
+  <div class="flex items-center justify-between mb-3"><h3 class="serif text-xl"><i class="fa-solid fa-arrows-rotate mr-2" style="color:var(--em)"></i>Data Sync / Cloud Bridge</h3><button onclick="closeM('syncModal')" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <p class="text-sm mb-4" style="color:var(--mut)">Keeps your orders in <b>Supabase</b> and in your billing <b>Google Sheet</b> in step. Orders are matched by <b>Order ID</b>, so nothing is ever duplicated or deleted, and an empty value never overwrites existing data.</p>
+  <div class="grid grid-cols-1 gap-3">
+    <button id="syncBtn1" class="btn btn-gold" onclick="syncToSheet()"><i class="fa-solid fa-database"></i>Supabase &#10132; Google Sheets</button>
+    <button id="syncBtn2" class="btn" onclick="syncFromSheet()"><i class="fa-solid fa-table"></i>Google Sheets &#10132; Supabase</button>
+  </div>
+  <div class="mt-4 rounded-xl p-3" style="background:rgba(0,0,0,.35)">
+    <div class="flex items-center gap-2 text-sm"><i id="syncSpin" class="fa-solid fa-spinner fa-spin hidden" style="color:var(--cy)"></i><span id="syncStatus" style="color:var(--mut)">Ready.</span></div>
+    <div class="mt-2 rounded-full" style="height:8px;background:rgba(255,255,255,.08);overflow:hidden"><div id="syncBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--em),var(--cy));transition:width .25s"></div></div>
+    <div id="syncResult" class="text-xs mt-3 break-words"></div>
+  </div>
+  <div id="syncLast" class="text-xs mt-3" style="color:var(--mut)"></div>
+  <p class="text-xs mt-3" style="color:var(--mut)">Importing from the sheet records orders only: it never changes inventory stock. Stock is changed only when an order is saved in the app.</p>
+  <button class="btn btn-ghost w-full mt-4" onclick="closeM('syncModal')">Close</button>
+</div></div>
+
+<div id="invViewModal" class="modal" onclick="if(event.target===this)closeM('invViewModal')"><div class="glass neon w-full max-w-lg p-4 text-center" style="background:#0e0e16">
+  <p id="invViewSku" class="serif mb-3" style="color:var(--gd)"></p>
+  <img id="invViewImg" alt="Product image" class="mx-auto rounded-xl max-w-full" style="max-height:70vh">
+  <button class="btn btn-ghost mt-4" onclick="closeM('invViewModal')">Close</button>
+</div></div>
+
+<!-- AMAR -->
+<button onclick="toggleAmar()" class="fixed bottom-5 right-5 z-50 w-16 h-16 rounded-full text-2xl pulse-glow float" style="background:linear-gradient(135deg,var(--em),var(--cy));color:#04120b" aria-label="Open AMAR assistant"><i class="fa-solid fa-robot"></i></button>
+<aside id="drawer" aria-label="AMAR assistant">
+  <div class="p-4 flex items-center justify-between" style="border-bottom:1px solid rgba(255,255,255,.1)">
+    <div><p class="serif font-bold" style="color:var(--em)">AMAR &mdash; SHYNWELL Store &amp; Seller Assistant</p><p class="text-xs" style="color:var(--mut)"><span id="orderCount">0</span> orders in memory</p></div>
+    <button onclick="toggleAmar()" aria-label="Close" class="text-xl"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div id="chat" class="flex-1 overflow-y-auto p-3 flex flex-col gap-2"></div>
+  <div class="px-3 py-2 flex gap-1.5 overflow-x-auto whitespace-nowrap">
+    <span class="chip" onclick="ask('What can you do?')">What can you do?</span>
+    <span class="chip" onclick="ask('Platform margin analysis')">Margin analysis</span>
+    <span class="chip" onclick="ask('What is my average profit per order on Meesho compared to Amazon?')">Meesho vs Amazon</span>
+    <span class="chip" onclick="ask('Show orders with pending credited price reconciliation')">Pending credits</span>
+    <span class="chip" onclick="ask('Which state gives me the highest jewellery orders?')">Top state</span>
+    <span class="chip" onclick="ask('Calculate my total net profit for this month')">Profit this month</span>
+    <span class="chip" onclick="ask('Inventory insights')">Inventory</span>
+    <span class="chip" onclick="ask('Show platform share chart')">Platform chart</span>
+    <span class="chip" onclick="ask('Download PDF report')">PDF report</span>
+  </div>
+  <div class="px-3 pb-2 grid grid-cols-2 gap-2">
+    <button class="btn btn-ghost !py-2 text-sm" onclick="exportXlsx()"><i class="fa-solid fa-file-excel" style="color:var(--em)"></i>Excel</button>
+    <button class="btn btn-ghost !py-2 text-sm" onclick="exportPdf()"><i class="fa-solid fa-file-pdf" style="color:#ff6b81"></i>PDF</button>
+  </div>
+  <form class="p-3 flex gap-2" style="border-top:1px solid rgba(255,255,255,.1)" onsubmit="event.preventDefault();ask(q.value);q.value=''">
+    <input id="q" class="inp" placeholder="Ask anything about your orders..." autocomplete="off"><button class="btn !px-4" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+</aside>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbx3KqqcOeVCUXIV0m6fpr2xiMcE2p2NCEmL1NEbv6zTO2zvDMqVUCou7MokdU5O12RS/exec';
+const getUrl = () => (localStorage.getItem('shyn_url') || DEFAULT_URL).trim();
+/* Separate INVENTORY-sheet Apps Script (never the billing script). Its /exec URL can also be pasted later with the table icon in the top bar. */
+const INV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3waLpMARXOl8KBSXHTnjPsSENJbMqFtW5TjtTPbU1yMXFEj6N2nUU0NC6UDuxmUCUNA/exec';
+const getInvUrl = () => (localStorage.getItem('shyn_inv_url') || INV_SCRIPT_URL).trim();
+
+const $ = id => document.getElementById(id);
+const openM = id => $(id).classList.add('show'), closeM = id => $(id).classList.remove('show');
+const money = n => 'Rs ' + (Number(n) || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const num = v => parseFloat(v) || 0;
+let orders = [], found = null, charts = [], pendingFile = null, toastT;
+function toast(msg, bad) { const t = $('toast'); t.textContent = msg; t.style.borderColor = bad ? '#ff6b81' : 'var(--em)'; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 3500); }
+
+/* ============ AUTH ============ */
+const getPw = () => localStorage.getItem('shyn_pw') || 'Arshad';
+function enter() { $('loginView').classList.add('hidden'); $('appView').classList.remove('hidden'); sessionStorage.setItem('shyn_in', '1'); loadOrders(); greet(); setTimeout(() => invLoad(true), 0); }
+$('loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if ($('lu').value.trim().toLowerCase() === 'shynwell' && $('lp').value === getPw()) { $('lerr').textContent = ''; enter(); }
+  else $('lerr').textContent = 'Username or password is incorrect.';
+});
+let otpTick = null, otpEnd = 0, resendAt = 0;
+function openForgot() { showStep(1); fmsg(''); openM('forgotModal'); }
+function closeForgot() { clearInterval(otpTick); closeM('forgotModal'); }
+function showStep(n) { [1, 2, 3].forEach(i => $('fs' + i).classList.toggle('hidden', i !== n)); }
+function fmsg(t, bad) { $('fmsg').textContent = t; $('fmsg').style.color = bad ? '#ff6b81' : 'var(--em)'; }
+async function sendOtp() {
+  const b = $('sendBtn'); b.disabled = true; $('resBtn').disabled = true; fmsg('Sending OTP...');
+  try {
+    const r = await api('POST', {action: 'sendOtp'}); if (!r.success) throw new Error(r.error || 'Could not send OTP');
+    otpEnd = Date.now() + (r.expiresIn || 300) * 1000; resendAt = Date.now() + 30000;
+    $('otpSent').textContent = r.message || 'OTP sent.'; $('otpIn').value = ''; $('verBtn').disabled = false; showStep(2); fmsg(''); $('otpIn').focus(); startTick();
+  } catch (e) { fmsg(e.message, true); if (!$('fs2').classList.contains('hidden')) startTick(); }
+  b.disabled = false;
+}
+function startTick() {
+  clearInterval(otpTick);
+  const f = () => {
+    const left = Math.max(0, Math.round((otpEnd - Date.now()) / 1000)), w = Math.max(0, Math.ceil((resendAt - Date.now()) / 1000));
+    $('otpTime').textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
+    $('resBtn').disabled = w > 0; $('resBtn').textContent = w > 0 ? `Resend OTP (${w}s)` : 'Resend OTP';
+    if (!left) { clearInterval(otpTick); $('verBtn').disabled = true; $('resBtn').disabled = false; $('resBtn').textContent = 'Resend OTP'; fmsg('OTP expired. Tap Resend OTP.', true); }
+  };
+  f(); otpTick = setInterval(f, 1000);
+}
+function otpInput() { const i = $('otpIn'); i.value = i.value.replace(/\D/g, '').slice(0, 6); if (i.value.length === 6) verifyOtp(); }
+async function verifyOtp() {
+  if ($('verBtn').disabled) return;
+  const code = $('otpIn').value; if (code.length !== 6) return fmsg('Enter the 6-digit OTP.', true);
+  $('verBtn').disabled = true; fmsg('Verifying...');
+  try {
+    const r = await api('POST', {action: 'verifyOtp', otp: code}); if (!r.success) throw new Error(r.error || 'Invalid OTP');
+    clearInterval(otpTick); $('cU').textContent = r.username; $('cP').textContent = r.password; showStep(3); fmsg('');
+  } catch (e) { fmsg(e.message, true); if (otpEnd > Date.now()) $('verBtn').disabled = false; }
+}
+function loginWithCreds() { $('lu').value = $('cU').textContent; $('lp').value = $('cP').textContent; closeForgot(); enter(); }
+function logout() { sessionStorage.removeItem('shyn_in'); location.reload(); }
+if (sessionStorage.getItem('shyn_in')) enter();
+
+/* ============ DATA LAYER ============ */
+function openConn() { $('urlIn').value = getUrl(); $('connMsg').textContent = ''; openM('connModal'); }
+async function saveUrl() {
+  const u = $('urlIn').value.trim(); localStorage.setItem('shyn_url', u);
+  if (!u) { $('connMsg').textContent = 'Demo mode on. Orders are stored in this browser only.'; loadOrders(); return; }
+  $('connMsg').textContent = 'Testing...'; $('connMsg').style.color = 'var(--mut)';
+  try { await api('GET', {action: 'ping'}); $('connMsg').textContent = 'Connected.'; $('connMsg').style.color = 'var(--em)'; loadOrders(); }
+  catch (e) { $('connMsg').textContent = e.message; $('connMsg').style.color = '#ff6b81'; }
+}
+function resetUrl() { localStorage.removeItem('shyn_url'); $('urlIn').value = getUrl(); $('connMsg').textContent = 'Default URL restored.'; $('connMsg').style.color = 'var(--em)'; }
+async function runDiag() {
+  const out = $('diagOut'); out.classList.remove('hidden'); out.textContent = 'Running checks...\n';
+  const log = (ok, msg) => { out.textContent += (ok ? 'PASS  ' : 'FAIL  ') + msg + '\n'; };
+  const url = getUrl();
+  out.textContent += 'Web App URL in use:\n' + url + '\n\n';
+  try {
+    const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=ping'), t = await r.text(); let j = null; try { j = JSON.parse(t); } catch (e) {}
+    log(j && j.success, j && j.success ? '1. Apps Script ping' : '1. Apps Script answered with a web page, not data (HTTP ' + r.status + '): ' + t.slice(0, 70).replace(/\s+/g, ' ') + ' -> set access to "Anyone" and deploy a New version');
+  } catch (e) { log(false, '1. Apps Script is blocked from this site. Cause: access is not "Anyone", wrong/old URL, test (/dev) URL, or a network/ad blocker.'); }
+  try { const r = await api('GET', {action: 'getOrders'}); log(r.success, '2. Sheet read (getOrders)' + (r.success ? ' - ' + (r.orders || []).length + ' orders' : ': ' + r.error)); }
+  catch (e) { log(false, '2. Sheet read: ' + e.message); }
+  const chk = async (label, path, hint) => {
+    try { const r = await fetch(SUPA.url + path, {headers: supaHeaders()}); log(r.ok, label + ' (HTTP ' + r.status + ')' + (r.ok ? '' : ' ' + await supaErr(r) + ' -> ' + hint)); }
+    catch (e) { log(false, label + ': Supabase unreachable'); }
+  };
+  await chk('3. Supabase table read', '/rest/v1/' + SUPA.table + '?select=id&limit=1', 'run supabase.sql (table + policies)');
+  await chk('4. Column shipping_date', '/rest/v1/' + SUPA.table + '?select=shipping_date&limit=1', 'run supabase.sql (adds the column)');
+  await chk('6. Inventory tables (inventory.sql)', '/rest/v1/inventory?select=serial_no&limit=1', 'run inventory.sql');
+  await chk('8. Sync tables (sync.sql)', '/rest/v1/sync_log?select=id&limit=1', 'run sync.sql');
+  try { const r = await fetch(SUPA.url + '/storage/v1/object/public/' + SUPA.bucket + '/_probe'), t = await r.text();
+    log(!/bucket not found/i.test(t), '5. Storage bucket "' + SUPA.bucket + '" is public' + (/bucket not found/i.test(t) ? ' -> create it as PUBLIC (supabase.sql does this)' : '')); }
+  catch (e) { log(false, '5. Storage unreachable'); }
+  if (getInvUrl()) { try { const r = await invApi('ping'); log(r.success, '7. Inventory sheet script'); } catch (e) { log(false, '7. Inventory sheet script: ' + e.message); } }
+  out.textContent += '\nAll PASS = ready. Send me any FAIL line.';
+}
+async function api(method, p) {
+  const url = getUrl(); if (!url) return localApi(method, p);
+  let res;
+  try {
+    res = method === 'GET' ? await fetch(url + (url.includes('?') ? '&' : '?') + new URLSearchParams(p))
+      : await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(p)});
+  } catch (e) { throw new Error('Cannot reach the server. Check internet and the Web App URL.'); }
+  const txt = await res.text();
+  try { return JSON.parse(txt); }
+  catch (e) { throw new Error('Server sent a web page, not data. Use the /exec URL, set access to "Anyone", and deploy a New version.'); }
+}
+function localApi(method, p) {
+  const db = JSON.parse(localStorage.getItem('shyn_orders') || '[]');
+  const idx = id => db.map(x => String(x['Order ID']).toLowerCase()).lastIndexOf(String(id).toLowerCase());
+  if (p.action === 'getOrders') return {success: true, orders: db};
+  if (p.action === 'ping') return {success: true};
+  if (p.action === 'searchOrder') { const i = idx(p.orderId); return i < 0 ? {success: false, error: 'Order not found'} : {success: true, order: db[i]}; }
+  if (p.action === 'addOrder') {
+    const profit = (num(p.creditedPrice) > 0 ? num(p.creditedPrice) : num(p.salePrice)) - num(p.originalPrice);
+    db.push({'Timestamp': new Date().toISOString().slice(0, 19).replace('T', ' '), 'Order ID': p.orderId, 'Platform': p.platform, 'Customer Name': p.customerName, 'State': p.state,
+      'Full Address': p.address, 'Invoice Date': p.invoiceDate, 'Shipping Date': p.shippingDate, 'SKU ID': p.skuId, 'Payment Type': p.paymentType, 'Customer Price': num(p.customerPrice), 'CGST': num(p.cgst),
+      'SGST': num(p.sgst), 'IGST': num(p.igst), 'Original Price': num(p.originalPrice), 'Sale Price': num(p.salePrice), 'Credited Price': num(p.creditedPrice), 'Net Profit': profit, 'Notes': p.notes});
+    localStorage.setItem('shyn_orders', JSON.stringify(db)); return {success: true};
+  }
+  if (p.action === 'updateOrder') {
+    const i = idx(p.orderId); if (i < 0) return {success: false, error: 'Order not found'};
+    Object.assign(db[i], {'Original Price': num(p.originalPrice), 'Sale Price': num(p.salePrice), 'Credited Price': num(p.creditedPrice), 'Net Profit': num(p.creditedPrice) - num(p.originalPrice)});
+    if (p.newOrderId !== undefined) Object.assign(db[i], {'Order ID': p.newOrderId, 'Customer Name': p.customerName, 'State': p.state, 'Full Address': p.address, 'Invoice Date': p.invoiceDate, 'Shipping Date': p.shippingDate,
+      'SKU ID': p.skuId, 'Customer Price': num(p.customerPrice), 'CGST': num(p.cgst), 'SGST': num(p.sgst), 'IGST': num(p.igst), 'Notes': p.notes,
+      'Order Status': p.orderStatus || '', 'Cancel Reason': p.cancelReason || '', 'Loss Amount': num(p.lossAmount)});
+    localStorage.setItem('shyn_orders', JSON.stringify(db)); return {success: true};
+  }
+  if (p.action === 'sendOtp' || p.action === 'verifyOtp') return {success: false, error: 'OTP needs the live Google Sheet connection. Tap the link icon after signing in, or use the default URL.'};
+  return {success: false, error: 'Unknown action'};
+}
+async function loadOrders() {
+  try { const r = await api('GET', {action: 'getOrders'}); orders = (r.orders || []).map(o => ({...o})); }
+  catch (e) { toast(e.message, true); }
+  $('orderCount').textContent = orders.length;
+}
+
+/* ============ ORDER FORM ============ */
+function otherBox() { $('platformOther').classList.toggle('hidden', $('platform').value !== 'Others'); }
+function liveA() { $('liveA').textContent = money($('salePrice').value - $('originalPrice').value); }
+/* ---- Supabase (Storage + Database) ---- */
+const SUPA = {
+  url: 'https://gcjframqlnfijwjjyltc.supabase.co',
+  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjamZyYW1xbG5maWp3amp5bHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MjIxODYsImV4cCI6MjEwNzE5ODE4Nn0.Jd4rKlXb2zj04ON2oWFqCeCWC4mFmSsGxgln4DlfZFI',
+  bucket: 'invoices', table: 'invoices'
+};
+const supaHeaders = extra => ({apikey: SUPA.key, Authorization: 'Bearer ' + SUPA.key, ...extra});
+const safeName = n => (n || 'file').replace(/[^\w.\-]+/g, '_');
+async function supaErr(res) { try { const j = await res.json(); return j.message || j.error || res.statusText; } catch (e) { return res.statusText; } }
+async function supaUpload(path, file) {
+  const res = await fetch(`${SUPA.url}/storage/v1/object/${SUPA.bucket}/${path}`, {
+    method: 'POST', headers: supaHeaders({'Content-Type': file.type || 'application/octet-stream', 'x-upsert': 'false'}), body: file});
+  if (!res.ok) throw new Error('Upload failed (' + path.split('/')[0] + '): ' + await supaErr(res));
+  return `${SUPA.url}/storage/v1/object/public/${SUPA.bucket}/${path}`;
+}
+const DUP_MSG = 'This Order ID already exists!';
+const dupErr = where => Object.assign(new Error(DUP_MSG + (where && where.length ? ' (found in ' + where.join(' & ') + ')' : '')), {dup: true});
+async function supaInsert(row) {
+  const res = await fetch(`${SUPA.url}/rest/v1/${SUPA.table}`, {
+    method: 'POST', headers: supaHeaders({'Content-Type': 'application/json', Prefer: 'return=minimal'}), body: JSON.stringify(row)});
+  if (!res.ok) {
+    let j = {}; try { j = await res.json(); } catch (e) {}
+    if (res.status === 409 || j.code === '23505') throw dupErr(['database']);   // unique index violation
+    throw new Error('Database insert failed: ' + (j.message || res.statusText));
+  }
+}
+/* Checks Supabase + Google Sheet; returns where the Order ID already exists (empty array = free to use) */
+async function orderIdExists(id) {
+  const where = [];
+  try { if (await supaGetByOrder(id)) where.push('database'); } catch (e) {}
+  try { const r = await api('GET', {action: 'searchOrder', orderId: id}); if (r && r.success) where.push('sheet'); } catch (e) {}
+  return where;
+}
+function showDup(on) { $('orderIdMsg').textContent = on ? DUP_MSG : ''; $('orderId').style.borderColor = on ? '#ff6b81' : ''; }
+$('orderId').addEventListener('input', () => showDup(false));
+$('orderId').addEventListener('change', async () => { const id = $('orderId').value.trim(); if (id) showDup((await orderIdExists(id)).length > 0); });
+
+/* ---- Attachment pickers + previews ---- */
+const att = {inv: null, pack: null};
+let synced = null, saving = false;   // synced = Supabase result kept so a Sheet retry never duplicates the DB row
+const isPdfFile = f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name || '');
+function setAtt(kind, f) {
+  if (!f) return; att[kind] = f; synced = null;
+  const k = kind === 'inv' ? 'Inv' : 'Pack', img = $('att' + k + 'Img'), pdf = $('att' + k + 'Pdf'), pd = isPdfFile(f);
+  $('att' + k + 'Box').classList.remove('hidden');
+  $('att' + k + 'Name').textContent = f.name || 'Captured photo'; $('att' + k + 'Name').title = f.name || '';
+  $('att' + k + 'Meta').textContent = (pd ? 'PDF' : 'Image') + ' - ' + fmtSize(f.size);
+  img.classList.toggle('hidden', pd); pdf.classList.toggle('hidden', !pd); pdf.style.display = pd ? 'flex' : 'none';
+  if (img.dataset.u) { URL.revokeObjectURL(img.dataset.u); img.dataset.u = ''; }
+  if (!pd) { const u = URL.createObjectURL(f); img.src = u; img.dataset.u = u; }
+}
+function clearAtt(kind) {
+  att[kind] = null; synced = null; const k = kind === 'inv' ? 'Inv' : 'Pack', img = $('att' + k + 'Img');
+  $('att' + k + 'Box').classList.add('hidden'); $('att' + k + 'Pdf').style.display = 'none';
+  if (img.dataset.u) { URL.revokeObjectURL(img.dataset.u); img.dataset.u = ''; } img.removeAttribute('src');
+}
+[['invFileIn', 'inv'], ['packGalIn', 'pack'], ['packCamIn', 'pack']].forEach(([id, kind]) =>
+  $(id).addEventListener('change', e => { setAtt(kind, e.target.files[0]); e.target.value = ''; }));
+function setBusy(on, label) {
+  saving = on; $('saveBtn').disabled = on; $('saveTxt').textContent = on ? label : 'Save order';
+  $('saveIco').className = on ? 'fa-solid fa-spinner fa-spin' : 'fa-solid fa-cloud-arrow-up';
+}
+
+/* ---- Image compression: canvas -> JPEG under maxSizeKB. PDFs / non-images are returned untouched. ---- */
+const MAX_PDF_MB = 5;   // PDFs cannot be canvas-compressed, so larger ones are rejected before upload
+async function compressImage(file, maxSizeKB = 50) {
+  if (!file || !String(file.type).startsWith('image/')) return file;
+  const maxBytes = maxSizeKB * 1024;
+  if (file.size <= maxBytes && file.type === 'image/jpeg') return file;           // already small enough
+  let src;
+  try { src = await createImageBitmap(file, {imageOrientation: 'from-image'}); }   // keeps phone-camera rotation correct
+  catch (e) {
+    src = await new Promise((ok, no) => { const im = new Image(), u = URL.createObjectURL(file);
+      im.onload = () => { URL.revokeObjectURL(u); ok(im); }; im.onerror = () => { URL.revokeObjectURL(u); no(new Error('Could not read the image')); }; im.src = u; });
+  }
+  const toBlob = (c, q) => new Promise(res => c.toBlob(res, 'image/jpeg', q));
+  let best = null, c = null;
+  for (const maxSide of [1600, 1280, 1024, 800, 640, 480]) {                       // shrink the picture until a quality fits
+    const k = Math.min(1, maxSide / Math.max(src.width, src.height));
+    c = document.createElement('canvas'); c.width = Math.max(1, Math.round(src.width * k)); c.height = Math.max(1, Math.round(src.height * k));
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(src, 0, 0, c.width, c.height);
+    let lo = 0.3, hi = 0.85, fit = null;
+    for (let i = 0; i < 6; i++) { const q = (lo + hi) / 2, b = await toBlob(c, q); if (!b) break; if (b.size <= maxBytes) { fit = b; lo = q; } else hi = q; }
+    if (fit) { best = fit; break; }
+  }
+  if (!best) best = await toBlob(c, 0.3);                                          // smallest possible if nothing fit
+  if (src.close) src.close();
+  if (!best) return file;                                                          // canvas not supported: upload the original
+  return new File([best], (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg', {type: 'image/jpeg', lastModified: Date.now()});
+}
+
+/* ---- Submit: validate -> Storage -> DB insert -> Google Sheet mirror ---- */
+$('orderForm').addEventListener('submit', async e => {
+  e.preventDefault(); if (saving) return;
+  if (!att.inv || !att.pack) return toast('Please add both the invoice file and the packing photo', true);
+  const secs = secSkus();
+  const plat = $('platform').value === 'Others' ? ($('platformOther').value.trim() || 'Others') : $('platform').value;
+  const p = {action: 'addOrder', platform: plat, orderId: $('orderId').value.trim(), customerName: $('customerName').value.trim(), state: $('state').value.trim(),
+    address: $('address').value.trim(), invoiceDate: $('invoiceDate').value, shippingDate: $('shippingDate').value, skuId: $('skuId').value.trim(), paymentType: document.querySelector('[name=pay]:checked').value,
+    customerPrice: $('customerPrice').value, cgst: $('cgst').value, sgst: $('sgst').value, igst: $('igst').value,
+    originalPrice: $('originalPrice').value, salePrice: $('salePrice').value, creditedPrice: 0, notes: $('notes').value.trim(), secondarySkus: secs.join(', ')};
+  try {
+    let urls = synced && synced.orderId === p.orderId ? synced : null;
+    if (!urls) {
+      setBusy(true, 'Checking Order ID...');
+      const where = await orderIdExists(p.orderId); if (where.length) throw dupErr(where);
+      setBusy(true, 'Checking stock...');
+      await invValidateSale(secs);
+      setBusy(true, 'Compressing images...');
+      for (const f of [att.inv, att.pack]) if (isPdfFile(f) && f.size > MAX_PDF_MB * 1024 * 1024) throw new Error(`"${f.name}" is ${fmtSize(f.size)} - PDFs must be under ${MAX_PDF_MB} MB`);
+      const [invFile, packFile] = await Promise.all([compressImage(att.inv, 50), compressImage(att.pack, 50)]);   // PDFs pass through unchanged
+      setBusy(true, 'Uploading files...');
+      const t = Date.now();
+      const [invoice_url, packing_image_url] = await Promise.all([
+        supaUpload(`bills/${t}_${safeName(invFile.name)}`, invFile),
+        supaUpload(`packing/${t}_${safeName(packFile.name)}`, packFile)]);
+      setBusy(true, 'Saving to database...');
+      try {   // invoice row + stock deduction happen together in ONE database transaction
+        await rpc('create_invoice_with_stock', {p_order_id: p.orderId, p_amount: num(p.customerPrice) || num(p.salePrice), p_tax: num(p.cgst) + num(p.sgst) + num(p.igst),
+          p_shipping_date: p.shippingDate || null, p_invoice_url: invoice_url, p_packing_url: packing_image_url,
+          p_primary_sku: p.skuId || null, p_secondary_skus: secs});   // primary SKU is stored for reference only; only secondary SKUs reduce stock
+      } catch (e) {
+        if (e.notSetUp && !secs.length) {   // inventory.sql not installed yet and no secondary SKUs: behave exactly like before
+          await supaInsert({order_id: p.orderId, amount: num(p.customerPrice) || num(p.salePrice), tax: num(p.cgst) + num(p.sgst) + num(p.igst), shipping_date: p.shippingDate || null, invoice_url, packing_image_url});
+        } else { try { await storageRemove([storagePathFromUrl(invoice_url), storagePathFromUrl(packing_image_url)]); } catch (x) {} throw e; }   // do not leave orphan files
+      }
+      urls = synced = {orderId: p.orderId, invoice_url, packing_image_url};
+    }
+    setBusy(true, 'Syncing to Google Sheet...');
+    p.invoiceUrl = urls.invoice_url; p.packingImageUrl = urls.packing_image_url;
+    const r = await api('POST', p); if (!r.success) throw new Error(r.error || 'Save failed');
+    synced = null; toast('Order saved - files uploaded & synced');
+    e.target.reset(); resetSecSkus(); invLoad(true).then(() => invMirrorSoon()); showDup(false); otherBox(); liveA(); clearPrev(); clearAtt('inv'); clearAtt('pack'); loadOrders();
+  } catch (err) {
+    if (err.dup) { showDup(true); $('orderId').focus(); return toast(err.message, true); }
+    toast(synced ? 'Saved to Supabase, but Google Sheet failed: ' + err.message + ' - tap Save again to retry the sheet' : 'Could not save: ' + err.message, true);
+  } finally { setBusy(false); }
+});
+
+/* ============ CAMERA / FILE / OCR ============ */
+const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+function pick(f) {
+  if (!f) return; pendingFile = f;
+  $('prev').classList.remove('hidden'); $('prevName').textContent = f.name || 'Captured photo'; $('prevSize').textContent = fmtSize(f.size) + ' - ' + (f.type || 'file');
+  $('scanMsg').textContent = 'Tap Read to extract details.';
+  const isPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+  $('prevImg').classList.toggle('hidden', isPdf); $('prevPdf').classList.toggle('hidden', !isPdf); $('prevPdf').style.display = isPdf ? 'flex' : 'none';
+  if (!isPdf) { if ($('prevImg').dataset.u) URL.revokeObjectURL($('prevImg').dataset.u); const u = URL.createObjectURL(f); $('prevImg').src = u; $('prevImg').dataset.u = u; }
+}
+$('camIn').addEventListener('change', e => { pick(e.target.files[0]); e.target.value = ''; });
+$('fileIn').addEventListener('change', e => { pick(e.target.files[0]); e.target.value = ''; });
+function clearPrev() { pendingFile = null; $('prev').classList.add('hidden'); }
+const loadScript = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Could not load ' + src)); document.head.appendChild(s); });
+function shrink(file, max = 1800) {
+  return new Promise(res => {
+    const img = new Image(); img.onload = () => {
+      const k = Math.min(3, 2200 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = img.width * k; c.height = img.height * k; const cx = c.getContext('2d'); cx.imageSmoothingQuality = 'high'; cx.filter = 'grayscale(1) contrast(1.25)'; cx.drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => res(b || file), 'image/jpeg', .9);
+    }; img.onerror = () => res(file); img.src = URL.createObjectURL(file);
+  });
+}
+async function parseFile() {
+  if (!pendingFile) return; const f = pendingFile, msg = $('scanMsg'); msg.textContent = 'Reading invoice... this can take a few seconds.';
+  try {
+    let text = '';
+    if (f.type === 'application/pdf' || /\.pdf$/i.test(f.name)) {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({data: await f.arrayBuffer()}).promise;
+      for (let i = 1; i <= Math.min(pdf.numPages, 3); i++) { let ly = null; (await (await pdf.getPage(i)).getTextContent()).items.forEach(it => { const y = Math.round(it.transform[5]); text += (ly !== null && Math.abs(y - ly) > 3 ? '\n' : ' ') + it.str; ly = y; }); text += '\n'; }
+    } else {
+      await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js');
+      text = (await Tesseract.recognize(await shrink(f), 'eng')).data.text;
+    }
+    $('ocrRaw').textContent = text.slice(0, 4000); const r = parseInvoice(text);
+    msg.textContent = r.n ? `${r.layout ? r.layout + ' invoice detected. ' : ''}Filled ${r.n} field(s). Enter Original and Sale price manually, then verify.` : 'No details found. Please type them in.';
+  } catch (e) { msg.textContent = 'Could not read this file. Please type the details in.'; }
+}
+const STATES = ['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'].sort((a, b) => b.length - a.length);
+const findState = s => STATES.find(x => new RegExp('\\b' + x.replace(/ /g, '\\s+') + '\\b', 'i').test(s || '')) || '';
+function parseDateStr(s) {
+  const p = x => String(x).padStart(2, '0'); let m = s.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);
+  if (m) return `${m[3].length === 2 ? '20' + m[3] : m[3]}-${p(m[2])}-${p(m[1])}`;
+  m = s.match(/(\d{1,2})(?:st|nd|rd|th)?[\s\-]+([A-Za-z]{3})[a-z]*[\s,\-]+(\d{4})/);
+  if (m) { const mi = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(m[2].toLowerCase()); if (mi >= 0) return `${m[3]}-${p(mi + 1)}-${p(m[1])}`; }
+  return '';
+}
+function parseInvoice(raw) {
+  const t = raw.replace(/\r/g, '').replace(/[ \t]+/g, ' '), one = t.replace(/\s+/g, ' ');
+  let n = 0; const put = (id, v) => { if (v !== undefined && v !== null && String(v).trim() !== '') { $(id).value = String(v).trim(); n++; } };
+
+  // ---- Layout detection (Meesho sheets often carry no "Meesho" word, so also use structure) ----
+  const hasAmz = /\b\d{3}-\d{7}-\d{7}\b/.test(one), hasMee = /\b\d{12,20}_\d{1,2}\b/.test(one);
+  const layout = /meesho|fashnear/i.test(one) ? 'Meesho' : (/amazon/i.test(one) || hasAmz) ? 'Amazon'
+    : (hasMee || (/bill\s*to\s*\/\s*ship\s*to/i.test(one) && /purchase\s*order\s*no|if\s*undelivered/i.test(one))) ? 'Meesho'
+    : /flipkart|\bOD\d{15,}/i.test(one) ? 'Flipkart' : '';
+  if (layout) { $('platform').value = layout; otherBox(); n++; }
+
+  // ---- Order ID ----
+  let oid = '';
+  if (layout === 'Amazon') oid = (one.match(/\b(\d{3}-\d{7}-\d{7})\b/) || [])[1];
+  else if (layout === 'Meesho') oid = (one.match(/\b(\d{12,20}_\d{1,2})\b/) || one.match(/purchase\s*order\s*no\.?\s*[:#-]?\s*(\d{12,20})/i) || one.match(/sub\s*order\s*(?:no\.?|number|id)\s*[:#-]?\s*([A-Za-z0-9_-]{6,})/i) || [])[1];
+  else if (layout === 'Flipkart') oid = (one.match(/\b(OD\d{15,})\b/) || [])[1];
+  if (!oid) oid = (one.match(/\b(\d{3}-\d{7}-\d{7})\b/) || one.match(/order\s*(?:id|no\.?|number)\s*[:#-]?\s*([A-Za-z0-9_-]{6,})/i) || [])[1];
+  put('orderId', oid);
+
+  // ---- Invoice date. Meesho prints "Order Date  Invoice Date" as headers, then both values: take the 2nd ----
+  const dts = x => [...x.matchAll(/\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}/g)].map(m => parseDateStr(m[0])).filter(Boolean);
+  const ii = one.search(/invoice\s*date/i); let ds = ii >= 0 ? dts(one.slice(ii + 12, ii + 100)) : [];
+  if (/order\s*date\s*invoice\s*date/i.test(one) && ds.length > 1) ds = [ds[1]];
+  const oi = one.search(/order\s*date/i);
+  put('invoiceDate', ds[0] || (oi >= 0 ? dts(one.slice(oi, oi + 60))[0] : '') || dts(one)[0]);
+
+  // ---- Customer name + delivery address (never the seller's "Sold by" / "return to" block) ----
+  const blk = (re, len) => { const m = t.match(re); return m ? t.slice(m.index + m[0].length, m.index + m[0].length + len).replace(/^[\s:,\-]+/, '') : ''; };
+  const CUT = /place\s*of\s*(?:supply|delivery)|sold\s*by|order\s*(?:no|number|id)|invoice\s*(?:no|number|date|details)|purchase\s*order|product\s*details|description|if\s*undelivered|gstin|pan\s*no|state\/ut\s*code|\bsku\b|\bawb\b|ship\s*date|delivery\s*station/i;
+  let b = layout === 'Meesho' ? (blk(/bill\s*to\s*\/\s*ship\s*to\s*:?/i, 320) || blk(/customer\s*address\s*:?/i, 320))
+    : (blk(/shipping\s*address\s*:?/i, 320) || blk(/ship\s*to\s*:?/i, 320) || blk(/billing\s*address\s*:?/i, 320) || blk(/bill\s*to\s*:?/i, 320));
+  b = b.replace(/prepaid\s*:?\s*do\s*not\s*collect\s*cash/ig, ' ').split(CUT)[0].replace(/\s+IN\s*$/, '').trim();
+  const dedupe = a => a.filter((w, k) => w && w.toLowerCase() !== (a[k - 1] || '').toLowerCase());
+  const STOP = /^(?:h\.?\s?no\.?|hno|house|flat|door|plot|near|opp|street|road|apt|apartment|c\/o|d\.?no)$/i;
+  const first = b.split('\n')[0].trim(); let name = '';
+  if (b.includes('\n') && first.length > 2 && !/[\d,]/.test(first)) name = dedupe(first.replace(/[^A-Za-z .'\-]/g, '').split(/\s+/)).join(' ');
+  else { const nm = []; for (const w of b.replace(/[\n,]/g, ' ').split(/\s+/).filter(Boolean)) { if (/\d/.test(w) || STOP.test(w) || /^[-\u2013]$/.test(w) || nm.length >= 4) break; nm.push(w.replace(/[^A-Za-z.'\-]/g, '')); } name = dedupe(nm).join(' '); }
+  name = name.trim().slice(0, 40);
+  if (name.length > 2) put('customerName', name);
+  let addr = b.replace(/\s*\n\s*/g, ', ').replace(/\s+/g, ' ');
+  if (name && addr.toLowerCase().startsWith(name.toLowerCase())) addr = addr.slice(name.length);
+  put('address', addr.replace(/,\s*,/g, ',').replace(/\s+,/g, ',').replace(/^[\s,\-\u2013]+/, '').replace(/[\s,.]+$/, '').slice(0, 220));
+
+  // ---- State: customer's address first, then Place of delivery/supply (never the seller's state) ----
+  const pos = (one.match(/place\s*of\s*(?:delivery|supply)\s*:?\s*(.{0,40})/i) || [])[1];
+  put('state', findState(b) || findState(pos));
+
+  // ---- SKU + quantity ----
+  const BAD = /^(size|color|colour|qty|quantity|description|order|hsn|price|free|total|id|no)$/i;
+  let sku = '', qty = '';
+  if (layout === 'Amazon') sku = (one.match(/\(\s*([A-Za-z0-9._\-]{3,30})\s*\)\s*HSN/i) || [])[1] || '';   // "B0XXXXXXXX ( SKU-CODE ) HSN:7117"
+  const mh = one.match(/SKU\s+Size\s+Qty\s+Colou?r\s+Order\s*No\.?\s*([A-Za-z0-9._\-]{3,})\s+([A-Za-z0-9.\-]+(?:\s+Size)?)\s+(\d{1,3})\b/i);  // Meesho product row
+  if (!sku && mh) { sku = mh[1]; qty = mh[3]; }
+  if (!sku) { const m = one.match(/\bSKU\s*(?:ID|Code)?\s*[:\-]?\s*([A-Za-z0-9._\-]{3,})/i); if (m && !BAD.test(m[1])) sku = m[1]; }
+  if (!sku) sku = (one.match(/\(\s*([A-Za-z0-9._\-]{3,30})\s*\)\s*HSN/i) || one.match(/\b([A-Z]{2,6}-[A-Z]{1,5}-\d{2,4}(?:-\d{1,4})*)\b/) || one.match(/\b(B0[A-Z0-9]{8})\b/) || [])[1] || '';
+  put('skuId', sku);
+  if (!qty && layout === 'Amazon') qty = (one.match(/[\d,]+\.\d{2}\s+(\d{1,3})\s+[^\d\s]{0,3}\s*[\d,]+\.\d{2}/) || [])[1] || '';   // unit price, qty, net amount
+  if (!qty) qty = (one.match(/\bqty\.?\s*[:\-]?\s*(\d{1,3})\b/i) || [])[1] || '';
+
+  // ---- Customer total price: last amount on the TOTAL row ("TOTAL: Rs6.67 Rs229.00", "Total Rs.4.37 Rs.150.00") ----
+  const tm = [...one.matchAll(/(?:grand\s*total|invoice\s*value|total)\s*[:\-]?\s*((?:[^\d\s]{0,3}\s*[\d,]+\.\d{2}\s*){1,4})/gi)];
+  if (tm.length) { const nums = tm[tm.length - 1][1].match(/[\d,]+\.\d{2}/g); put('customerPrice', nums[nums.length - 1].replace(/,/g, '')); }
+
+  // ---- Tax breakdown: sum every line item so multi-row Meesho invoices add up ----
+  ['cgst', 'sgst', 'igst'].forEach(k => {
+    let tot = 0, hit = false;
+    for (const m of one.matchAll(new RegExp(k + '[^\\d%]{0,14}(?:\\d+(?:\\.\\d+)?\\s*%)?[^\\d]{0,8}([\\d,]+\\.\\d{2})', 'gi'))) { tot += parseFloat(m[1].replace(/,/g, '')); hit = true; }
+    if (hit) put(k, tot.toFixed(2));
+  });
+
+  // ---- Payment type ----
+  if (/prepaid\s*:?\s*do\s*not\s*collect/i.test(one)) document.querySelector('[name=pay][value=Prepaid]').checked = true;
+  else if (/cash\s*on\s*delivery|pay\s*on\s*delivery|\bcod\b/i.test(one)) document.querySelector('[name=pay][value=COD]').checked = true;
+  else if (/prepaid|credit\s*card|debit\s*card|\bupi\b|net\s*banking|paid\s*online/i.test(one)) document.querySelector('[name=pay][value=Prepaid]').checked = true;
+
+  // originalPrice and salePrice are intentionally NEVER filled: they must be typed manually.
+  put('notes', `Scanned ${layout || ''} invoice - verify details.${qty ? ' Qty: ' + qty + '.' : ''}`.replace('  ', ' '));
+  liveA(); return {n, layout};
+}
+
+/* ============ LOOKUP ============ */
+const toDateInput = v => { v = String(v || '').trim(); let m = v.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return m[0];
+  m = v.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/); return m ? `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}` : ''; };
+let supaRow = null;
+async function supaGetByOrder(orderId) {
+  const res = await fetch(`${SUPA.url}/rest/v1/${SUPA.table}?order_id=eq.${encodeURIComponent(orderId)}&select=*&order=created_at.desc&limit=1`, {headers: supaHeaders()});
+  if (!res.ok) throw new Error(await supaErr(res)); return (await res.json())[0] || null;
+}
+async function supaUpdate(id, row) {
+  const res = await fetch(`${SUPA.url}/rest/v1/${SUPA.table}?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH', headers: supaHeaders({'Content-Type': 'application/json', Prefer: 'return=representation'}), body: JSON.stringify(row)});
+  if (!res.ok) throw new Error(await supaErr(res));
+  if (!(await res.json()).length) throw new Error('no row updated (check the Supabase update policy)');
+}
+async function searchOrder() {
+  const id = $('searchId').value.trim(); if (!id) return; $('lookMsg').textContent = 'Searching...';
+  try {
+    const r = await api('GET', {action: 'searchOrder', orderId: id});
+    if (!r.success) { $('lookMsg').textContent = r.error || 'Order not found.'; $('lookBox').classList.add('hidden'); return; }
+    found = r.order; $('lookMsg').textContent = '';
+    $('lookInfo').innerHTML = `<b style="color:var(--gd)">${found['Customer Name']}</b> - ${found['Platform']} (${found['Payment Type']})<br>Order ${found['Order ID']} | SKU ${found['SKU ID']}${found['Secondary SKU IDs'] ? ' + ' + found['Secondary SKU IDs'] : ''}<br>${found['State']} | Invoice ${found['Invoice Date'] || '-'} | Shipping ${found['Shipping Date'] || '-'}<br>Customer price ${money(found['Customer Price'])}<br>CGST ${found['CGST']} | SGST ${found['SGST']} | IGST ${found['IGST']}${found['Order Status'] ? `<br><b style="color:#ff6b81">${invEsc(found['Order Status'])}</b>${found['Cancel Reason'] ? ' - ' + invEsc(found['Cancel Reason']) : ''}${Number(found['Loss Amount']) > 0 ? ' | Loss ' + money(found['Loss Amount']) : ''}` : ''}`;
+    const set = (i, v) => $(i).value = v ?? '';
+    set('eOrderId', found['Order ID']); set('eCust', found['Customer Name']); set('eState', found['State']); set('eSku', found['SKU ID']); set('eAddr', found['Full Address']);
+    set('eInvDate', toDateInput(found['Invoice Date'])); set('eShipDate', toDateInput(found['Shipping Date'])); set('ePrice', found['Customer Price']);
+    set('eCgst', found['CGST']); set('eSgst', found['SGST']); set('eIgst', found['IGST']); set('eNotes', found['Notes']);
+    $('uOrig').value = found['Original Price']; $('uSale').value = found['Sale Price']; $('uCred').value = found['Credited Price'] || '';
+    rcFill(found); $('lookBox').classList.remove('hidden'); liveB(); loadSupaRow(found['Order ID']);
+  } catch (e) { $('lookMsg').textContent = e.message; }
+}
+async function loadSupaRow(orderId) {
+  supaRow = null; const box = $('lookLinks'); box.classList.add('hidden'); box.innerHTML = ''; $('lookSkus').classList.add('hidden'); $('eSku').readOnly = false; $('eSku').title = '';
+  try {
+    supaRow = await supaGetByOrder(orderId); if (!supaRow) return;
+    const link = (u, ic, t) => u ? `<a href="${encodeURI(u)}" target="_blank" rel="noopener" class="chip"><i class="fa-solid ${ic} mr-1"></i>${t}</a>` : '';
+    box.innerHTML = link(supaRow.invoice_url, 'fa-file-invoice', 'View invoice') + link(supaRow.packing_image_url, 'fa-box-open', 'View packing file');
+    box.classList.toggle('hidden', !box.innerHTML);
+    try {
+      const sk = await invFetchAll(`invoice_skus?invoice_id=eq.${encodeURIComponent(supaRow.id)}&select=*&order=is_primary.desc,id.asc`);
+      if (sk.length) {
+        $('lookSkus').textContent = 'Stock-reduced SKUs: ' + sk.map(x => x.sku_id + (x.restored_at ? ' [stock restored]' : '')).join(', ') + ' - they cannot be changed here. To change them, delete the order (stock is restored) and create it again.';
+        $('lookSkus').classList.remove('hidden');
+      }
+    } catch (e) {}
+  } catch (e) { /* lookup still works without the Supabase row */ }
+}
+function liveB() { const v = num($('uCred').value) - num($('uOrig').value); $('liveB').textContent = money(v); $('liveB').style.color = v < 0 ? '#ff6b81' : 'var(--em)'; }
+async function updateOrder() {
+  if (!found || saving) return;
+  const v = i => $(i).value.trim(), oldId = found['Order ID'], newId = v('eOrderId');
+  if (!newId) return toast('Order ID cannot be empty', true);
+  let rc; try { rc = rcCollect(); } catch (e) { $('rcErr').textContent = e.message; $('rcBox').scrollIntoView({block: 'center', behavior: 'smooth'}); return toast(e.message, true); }
+  if (newId.toLowerCase() !== String(oldId).toLowerCase()) { const w = await orderIdExists(newId); if (w.length) return toast(dupErr(w).message, true); }
+  const p = {action: 'updateOrder', orderId: oldId, newOrderId: newId, customerName: v('eCust'), state: v('eState'), address: v('eAddr'), invoiceDate: $('eInvDate').value,
+    shippingDate: $('eShipDate').value, skuId: v('eSku'), customerPrice: $('ePrice').value, cgst: $('eCgst').value, sgst: $('eSgst').value, igst: $('eIgst').value, notes: v('eNotes'),
+    originalPrice: $('uOrig').value, salePrice: $('uSale').value, creditedPrice: $('uCred').value,
+    orderStatus: rc.orderStatus, cancelReason: rc.cancelReason, lossAmount: rc.lossAmount};
+  saving = true; $('updBtn').disabled = true; $('updTxt').textContent = 'Saving...'; $('updIco').className = 'fa-solid fa-spinner fa-spin';
+  try {
+    const r = await api('POST', p); if (!r.success) throw new Error(r.error || 'Update failed');
+    let warn = '';
+    if (supaRow) {
+      const base = {order_id: newId, amount: num(p.customerPrice) || num(p.salePrice), tax: num(p.cgst) + num(p.sgst) + num(p.igst), shipping_date: p.shippingDate || null};
+      try { await supaUpdate(supaRow.id, {...base, order_status: rc.orderStatus || null, cancel_reason: rc.cancelReason || null, loss_amount: rc.lossAmount}); }
+      catch (e) {
+        if (/column|schema cache/i.test(e.message)) {   // returns.sql not run yet: keep everything else working
+          try { await supaUpdate(supaRow.id, base); warn = ' - sheet updated, but the status / loss were not saved in Supabase (run returns.sql)'; } catch (e2) { warn = ' - sheet updated, but Supabase failed: ' + e2.message; }
+        } else warn = ' - sheet updated, but Supabase failed: ' + e.message;
+      }
+    }
+    toast('Order updated' + warn, !!warn); $('searchId').value = newId; loadOrders(); searchOrder();
+  } catch (e) { toast(e.message, true); }
+  finally { saving = false; $('updBtn').disabled = false; $('updTxt').textContent = 'Save / update changes'; $('updIco').className = 'fa-solid fa-floppy-disk'; }
+}
+/* ===== RETURN / CANCELLATION (Order Lookup) ===== */
+const RC_STATUSES = ['Cancel', 'RTO', 'Customer Return'], RC_REASONS = ['Seller Issue', 'Pickup Associate Issue', 'Others'];
+function rcToggle() {                            // show only the controls that apply to the chosen status
+  const st = $('rcStatus').value;
+  $('rcReasonBox').classList.toggle('hidden', st !== 'Cancel');
+  $('rcOther').classList.toggle('hidden', !(st === 'Cancel' && $('rcReason').value === 'Others'));
+  $('rcLossBox').classList.toggle('hidden', !st);
+  $('rcErr').textContent = '';
+}
+function rcFill(o) {                             // load the saved values of the opened order into the controls
+  const st = String(o['Order Status'] || '').trim(), rs = String(o['Cancel Reason'] || '').trim();
+  let reason = '', other = '';
+  if (st === 'Cancel' && rs) {
+    if (RC_REASONS.includes(rs)) reason = rs;
+    else { reason = 'Others'; other = rs.replace(/^Others\s*-\s*/i, ''); }
+  }
+  $('rcStatus').value = RC_STATUSES.includes(st) ? st : ''; $('rcReason').value = reason; $('rcOther').value = other;
+  const loss = parseFloat(o['Loss Amount']); $('rcLoss').value = loss > 0 ? loss : '';
+  rcToggle();
+}
+function rcCollect() {                           // returns the three payload fields, or throws a readable validation error
+  const st = $('rcStatus').value;
+  if (!st) return {orderStatus: '', cancelReason: '', lossAmount: 0};      // normal order: everything cleared
+  if (!RC_STATUSES.includes(st)) throw new Error('Choose a valid order status.');
+  let reason = '';
+  if (st === 'Cancel') {
+    const r = $('rcReason').value;
+    if (!RC_REASONS.includes(r)) throw new Error('Select a cancellation reason.');
+    if (r === 'Others') {
+      const t = $('rcOther').value.trim();
+      if (!t) throw new Error('Please specify the cancellation reason.');
+      if (t.length > 120) throw new Error('The reason is too long (maximum 120 characters).');
+      reason = 'Others - ' + t;
+    } else reason = r;
+  }
+  const raw = $('rcLoss').value.trim(); let loss = 0;
+  if (raw !== '') {
+    loss = Number(raw);
+    if (!isFinite(loss) || loss < 0) throw new Error('Loss amount must be 0 or more.');
+    if (loss > 10000000) throw new Error('Loss amount is too large.');
+    loss = Math.round(loss * 100) / 100;
+  }
+  return {orderStatus: st, cancelReason: reason, lossAmount: loss};
+}
+
+/* ============ DELETE ORDER: 1) storage files  2) Supabase row  3) Google Sheet row ============ */
+const storagePathFromUrl = u => { const m = String(u || '').match(/\/object\/public\/[^/]+\/(.+)$/); return m ? decodeURIComponent(m[1].split('?')[0]) : null; };
+async function deleteOrder() {
+  if (!found || saving) return;
+  const orderId = found['Order ID'];
+  if (!confirm(`Are you sure you want to permanently delete this order (Order ID: ${orderId})? This action cannot be undone.`)) return;
+  saving = true; $('delBtn').disabled = true; $('delTxt').textContent = 'Deleting...'; $('delIco').className = 'fa-solid fa-spinner fa-spin';
+  const warn = []; let stockMsg = '';
+  try {
+    let row = supaRow; if (!row) { try { row = await supaGetByOrder(orderId); } catch (e) {} }   // record holding the file URLs
+    if (row) {
+      try {   // stock goes back first; repeating this call never restores twice
+        const rs = await rpc('restore_invoice_stock', {p_order_id: orderId});
+        if (rs && rs.restored) stockMsg = ` - stock restored for ${rs.restored} SKU${rs.restored === 1 ? '' : 's'}`;
+      } catch (e) { if (!e.notSetUp) throw new Error('Could not restore stock: ' + e.message + ' (nothing was deleted)'); }
+      // 1) files in the bucket (bills/ and packing/)
+      const paths = [row.invoice_url, row.packing_image_url].map(storagePathFromUrl).filter(Boolean);
+      if (paths.length) {
+        const r = await fetch(`${SUPA.url}/storage/v1/object/${SUPA.bucket}`, {method: 'DELETE', headers: supaHeaders({'Content-Type': 'application/json'}), body: JSON.stringify({prefixes: paths})});
+        if (!r.ok) throw new Error('Could not delete the stored files: ' + await supaErr(r) + ' (nothing else was deleted)');
+        if ((await r.json()).length < paths.length) warn.push('some files were not removed - add the storage delete policy');
+      }
+      // 2) database row
+      const res = await fetch(`${SUPA.url}/rest/v1/${SUPA.table}?id=eq.${encodeURIComponent(row.id)}`, {method: 'DELETE', headers: supaHeaders({Prefer: 'return=representation'})});
+      if (!res.ok) throw new Error('Database delete failed: ' + await supaErr(res));
+      if (!(await res.json()).length) throw new Error('Database row was not deleted - add the table delete policy');
+      supaRow = null;
+    }
+    // 3) Google Sheet row (uses your existing Apps Script URL through api())
+    const sr = await api('POST', {action: 'deleteOrder', orderId: orderId});
+    if (!sr.success && sr.status !== 'not_found') throw new Error('Deleted from Supabase, but the sheet failed: ' + (sr.error || 'unknown error') + '. Tap Delete Order again to retry.');
+    toast(warn.length ? 'Order deleted' + stockMsg + ', but ' + warn.join('; ') : 'Order permanently deleted successfully' + stockMsg, !!warn.length);
+    if (stockMsg) invLoad(true).then(() => invMirrorSoon());
+    found = null; supaRow = null; $('lookBox').classList.add('hidden'); $('lookLinks').classList.add('hidden'); $('searchId').value = ''; $('lookMsg').textContent = ''; loadOrders();
+  } catch (e) { toast(e.message, true); }
+  finally { saving = false; $('delBtn').disabled = false; $('delTxt').textContent = 'Delete Order'; $('delIco').className = 'fa-solid fa-trash'; }
+}
+
+/* ===== INVENTORY START ===== */
+let invRows = [], invImgTarget = null, invEditId = null, invBusy = false;
+const invEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const notSetUpErr = () => Object.assign(new Error('Inventory is not set up yet - run inventory.sql in the Supabase SQL Editor first'), {notSetUp: true});
+const isNotSetUp = (status, j) => status === 404 || !!(j && ['PGRST202', 'PGRST205', '42P01', '42883'].includes(j.code));
+
+function invFriendly(m) {
+  const [code, a, b, c] = String(m || '').split('|');
+  switch (code) {
+    case 'UNKNOWN_SKU': return `SKU "${a}" is not in Inventory. Add it on the Inventory page first.`;
+    case 'INSUFFICIENT_STOCK': return `Not enough stock for ${a}: available ${b}, needed ${c}.`;
+    case 'DUPLICATE_SKU': return `SKU "${a}" is entered twice in this invoice.`;
+    case 'SKU_EXISTS': return `SKU "${a}" already exists in Inventory.`;
+    case 'INVALID_SKU': case 'INVALID_QTY': case 'INVALID_ORDER': case 'NOT_FOUND': return a;
+    default: return String(m || 'Unknown error');
+  }
+}
+async function rpc(name, args) {
+  const res = await fetch(`${SUPA.url}/rest/v1/rpc/${name}`, {method: 'POST', headers: supaHeaders({'Content-Type': 'application/json'}), body: JSON.stringify(args || {})});
+  let j = null; try { j = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    if (res.status === 409 || (j && j.code === '23505')) throw dupErr(['database']);
+    if (isNotSetUp(res.status, j)) throw notSetUpErr();
+    throw new Error(invFriendly(j && j.message ? j.message : res.statusText));
+  }
+  return j;
+}
+async function invFetchAll(path) {     // pages of 1000 so ALL rows come back
+  const out = [], size = 1000;
+  for (let from = 0; ; from += size) {
+    const res = await fetch(`${SUPA.url}/rest/v1/${path}${path.includes('?') ? '&' : '?'}limit=${size}&offset=${from}`, {headers: supaHeaders()});
+    if (!res.ok) { let j = null; try { j = await res.json(); } catch (e) {} if (isNotSetUp(res.status, j)) throw notSetUpErr(); throw new Error((j && j.message) || res.statusText); }
+    const part = await res.json(); out.push(...part);
+    if (part.length < size) break;
+  }
+  return out;
+}
+async function storageRemove(paths) {
+  paths = (paths || []).filter(Boolean); if (!paths.length) return 0;
+  const r = await fetch(`${SUPA.url}/storage/v1/object/${SUPA.bucket}`, {method: 'DELETE', headers: supaHeaders({'Content-Type': 'application/json'}), body: JSON.stringify({prefixes: paths})});
+  if (!r.ok) throw new Error(await supaErr(r));
+  return (await r.json()).length;
+}
+
+/* ---- view switch ---- */
+function showView(v) {
+  const inv = v === 'inv';
+  $('billMain').classList.toggle('hidden', inv); $('invMain').classList.toggle('hidden', !inv);
+  $('navBill').classList.toggle('active', !inv); $('navInv').classList.toggle('active', inv); closeNavMenu(); closeInvPops();
+  if (inv) invLoad(); window.scrollTo(0, 0);
+}
+/* nav "Google Sheets" dropdown + inventory Download / Delete popovers */
+function closeNavMenu() { $('navMenu').classList.remove('show'); $('navLinkBtn').setAttribute('aria-expanded', 'false'); }
+function closeInvPops() { $('invDlPop').classList.remove('show'); $('invDelPop').classList.remove('show'); }
+function toggleNavMenu(e) { e.stopPropagation(); closeInvPops(); const m = $('navMenu'), open = !m.classList.contains('show'); m.classList.toggle('show', open); $('navLinkBtn').setAttribute('aria-expanded', String(open)); }
+function navMenuGo(w) { closeNavMenu(); if (w === 'inv') openInvConn(); else if (w === 'sync') openSync(); else openConn(); }   // Inventory sheet = default, Database sheet = existing billing connection box
+function invTogglePop(id, e) { e.stopPropagation(); closeNavMenu(); const el = $(id), open = !el.classList.contains('show'); closeInvPops(); el.classList.toggle('show', open); }
+document.addEventListener('click', e => { if (!e.target.closest('.popmenu')) { closeNavMenu(); closeInvPops(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeNavMenu(); closeInvPops(); } });
+
+/* ---- load + render ---- */
+async function invLoad(silent) {
+  if (!silent) $('invMsg').textContent = 'Loading inventory...';
+  try {
+    invRows = await invFetchAll('inventory?select=*&order=serial_no.asc');
+    $('skuList').innerHTML = invRows.map(r => `<option value="${invEsc(r.sku_id)}" label="Stock: ${r.stock_qty}"></option>`).join('');
+    invRender(); $('invMsg').textContent = '';
+  } catch (e) { if (!silent) $('invMsg').textContent = 'Could not load inventory: ' + e.message; }
+}
+const invFiltered = () => { const q = $('invSearch').value.trim().toLowerCase(); return q ? invRows.filter(r => String(r.sku_id).toLowerCase().includes(q)) : invRows; };
+function invRender() {
+  const rows = invFiltered(), total = invRows.length;
+  $('invCount').textContent = total ? `${rows.length} of ${total} item${total === 1 ? '' : 's'}` : '';
+  if (!rows.length) { $('invBody').innerHTML = `<tr><td colspan="5" class="p-6 text-center" style="color:var(--mut)">${total ? 'No SKU matches your search.' : 'No inventory items yet. Tap "Add Inventory Item".'}</td></tr>`; return; }
+  const btn = (ic, t, fn, extra) => `<button class="chip" style="${extra || ''}" onclick="${fn}"><i class="fa-solid ${ic} mr-1"></i>${t}</button>`;
+  $('invBody').innerHTML = rows.map(r => {
+    const n = Number(r.serial_no), q = r.stock_qty, col = q <= 0 ? '#ff6b81' : q <= 5 ? 'var(--gd)' : 'var(--em)';
+    const img = r.image_url ? `<img src="${invEsc(r.image_url)}" alt="" loading="lazy" class="rounded-lg object-cover" style="width:48px;height:48px">` : '<span class="text-xs" style="color:var(--mut)">No image</span>';
+    const acts = (r.image_url ? btn('fa-eye', 'View', `invView(${n})`) + btn('fa-arrows-rotate', 'Change', `invPickImage(${n})`) : btn('fa-upload', 'Upload', `invPickImage(${n})`))
+      + btn('fa-trash', 'Delete', `invDelete(${n})`, 'border-color:#ff6b81;color:#ff6b81');
+    return `<tr style="border-top:1px solid rgba(255,255,255,.08)"><td class="p-3">${n}</td><td class="p-3 font-semibold break-all">${invEsc(r.sku_id)}</td>
+      <td class="p-3 whitespace-nowrap"><b style="color:${col}">${q}</b> <button class="chip ml-1" aria-label="Edit stock" onclick="invOpenStock(${n})"><i class="fa-solid fa-pen"></i></button></td>
+      <td class="p-3">${img}</td><td class="p-3"><div class="flex flex-wrap gap-1.5">${acts}</div></td></tr>`;
+  }).join('');
+}
+
+/* ---- add item ---- */
+function invOpenAdd() { $('invNewSku').value = ''; $('invNewQty').value = '0'; $('invItemErr').textContent = ''; openM('invItemModal'); setTimeout(() => $('invNewSku').focus(), 50); }
+const invValidSku = v => v.length >= 1 && v.length <= 64 && !/[\u0000-\u001f<>"]/.test(v);
+const invValidQty = v => /^\d{1,7}$/.test(String(v).trim());
+async function invSaveItem() {
+  if (invBusy) return; const sku = $('invNewSku').value.trim(), qty = $('invNewQty').value.trim(), err = $('invItemErr');
+  if (!invValidSku(sku)) return err.textContent = 'Enter a SKU ID (1 to 64 characters, no < > or quotes).';
+  if (!invValidQty(qty)) return err.textContent = 'Stock must be a whole number, 0 or more.';
+  if (invRows.some(r => String(r.sku_id).trim().toLowerCase() === sku.toLowerCase())) return err.textContent = `SKU "${sku}" already exists.`;
+  invBusy = true; $('invItemBtn').disabled = true; err.textContent = '';
+  try { await rpc('inventory_add_item', {p_sku: sku, p_qty: parseInt(qty, 10)}); closeM('invItemModal'); toast('Inventory item added'); await invLoad(); invMirrorSoon(); }
+  catch (e) { err.textContent = e.message; }
+  finally { invBusy = false; $('invItemBtn').disabled = false; }
+}
+
+/* ---- edit stock ---- */
+function invOpenStock(n) {
+  const r = invRows.find(x => Number(x.serial_no) === n); if (!r) return;
+  invEditId = n; $('invStockSku').textContent = r.sku_id; $('invStockQty').value = r.stock_qty; $('invStockNote').value = ''; $('invStockErr').textContent = ''; openM('invStockModal');
+}
+async function invSaveStock() {
+  if (invBusy || invEditId == null) return; const qty = $('invStockQty').value.trim(), err = $('invStockErr');
+  if (!invValidQty(qty)) return err.textContent = 'Stock must be a whole number, 0 or more.';
+  invBusy = true; $('invStockBtn').disabled = true; err.textContent = '';
+  try { await rpc('inventory_set_stock', {p_serial: invEditId, p_qty: parseInt(qty, 10), p_note: $('invStockNote').value.trim() || null}); closeM('invStockModal'); toast('Stock updated'); await invLoad(); invMirrorSoon(); }
+  catch (e) { err.textContent = e.message; }
+  finally { invBusy = false; $('invStockBtn').disabled = false; }
+}
+
+/* ---- images: upload / change / view ---- */
+function invPickImage(n) { invImgTarget = n; $('invImgIn').click(); }
+$('invImgIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f && invImgTarget != null) invUploadImage(invImgTarget, f); });
+async function invUploadImage(n, file) {
+  const row = invRows.find(r => Number(r.serial_no) === n); if (!row || invBusy) return;
+  if (!String(file.type).startsWith('image/')) return toast('Please choose an image file', true);
+  invBusy = true; let path = null;
+  try {
+    toast('Uploading image...');
+    const f = await compressImage(file, 120);
+    path = `inventory/${Date.now()}_${safeName(row.sku_id)}.jpg`;
+    const url = await supaUpload(path, f);
+    let old = null;
+    try { old = await rpc('inventory_set_image', {p_serial: n, p_url: url, p_path: path}); }
+    catch (e) { try { await storageRemove([path]); } catch (x) {} throw e; }          // nothing saved -> do not leave the new file behind
+    if (old && old !== path) { try { await storageRemove([old]); } catch (x) {} }       // replaced image is removed from Storage
+    toast('Image saved'); await invLoad(); invMirrorSoon();
+  } catch (e) { toast('Image upload failed: ' + e.message, true); }
+  finally { invBusy = false; }
+}
+function invView(n) { const r = invRows.find(x => Number(x.serial_no) === n); if (!r || !r.image_url) return; $('invViewSku').textContent = r.sku_id; $('invViewImg').src = r.image_url; openM('invViewModal'); }
+
+/* ---- delete item (with confirmation) ---- */
+async function invDelete(n) {
+  const r = invRows.find(x => Number(x.serial_no) === n); if (!r || invBusy) return;
+  if (!confirm(`Delete inventory item "${r.sku_id}" (stock ${r.stock_qty})${r.image_url ? ' and its image' : ''}? This cannot be undone.`)) return;
+  invBusy = true;
+  try {
+    const path = await rpc('inventory_delete_item', {p_serial: n}); let note = '';
+    if (path) { try { await storageRemove([path]); } catch (e) { note = ' (image file could not be removed from Storage)'; } }
+    toast('Inventory item deleted' + note, !!note); await invLoad(); invMirrorDelete(r.sku_id);
+  } catch (e) { toast(e.message, true); }
+  finally { invBusy = false; }
+}
+
+/* ---- reports (CSV / XLSX) ---- */
+function toCsv(rows) {
+  const cell = v => { let t = v == null ? '' : String(v); if (typeof v !== 'number' && /^[=+\-@\t\r]/.test(t)) t = "'" + t; return /[",\r\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  return rows.map(r => r.map(cell).join(',')).join('\r\n');
+}
+function downloadFile(name, content, mime) {
+  const a = document.createElement('a'), u = URL.createObjectURL(new Blob([content], {type: mime}));
+  a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+async function invExportStock(kind, full) {
+  try {
+    toast('Preparing stock report...');
+    let rows = await invFetchAll('inventory?select=*&order=serial_no.asc');                // always fresh from Supabase
+    if (!full && $('invFilteredOnly').checked) { const q = $('invSearch').value.trim().toLowerCase(); if (q) rows = rows.filter(r => String(r.sku_id).toLowerCase().includes(q)); }
+    if (!rows.length) { toast('Inventory is empty - nothing to export', true); return false; }
+    const head = ['Serial Number', 'SKU ID', 'Available Stock', 'Product Image URL'], data = rows.map(r => [Number(r.serial_no), r.sku_id, r.stock_qty, r.image_url || '']);
+    const name = 'Inventory_Stock_Report_' + iso(new Date());
+    if (kind === 'xlsx') {
+      if (!await ensure(() => window.XLSX, ['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'])) return toast('Excel library failed to load. Check internet.', true);
+      const ws = XLSX.utils.aoa_to_sheet([head, ...data]); ws['!cols'] = [{wch: 14}, {wch: 26}, {wch: 16}, {wch: 60}];
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Stock'); XLSX.writeFile(wb, name + '.xlsx');
+    } else downloadFile(name + '.csv', '\ufeff' + toCsv([head, ...data]), 'text/csv;charset=utf-8');
+    toast(`Stock report downloaded (${rows.length} items)`); return true;
+  } catch (e) { toast('Report failed: ' + e.message, true); return false; }
+}
+async function invExportMoves() {
+  try {
+    toast('Preparing movement report...');
+    const rows = await invFetchAll('stock_movements?select=*&order=created_at.desc,id.desc');
+    if (!rows.length) { toast('No stock movements recorded yet', true); return false; }
+    const head = ['Date and Time', 'Invoice Number', 'SKU ID', 'Previous Stock', 'Quantity Added (+) / Sold (-)', 'Remaining Stock', 'Transaction Type', 'Note'];
+    const data = rows.map(r => [new Date(r.created_at).toLocaleString('en-IN'), r.invoice_no || '', r.sku_id, r.prev_stock, r.qty_change, r.new_stock, r.movement_type, r.note || '']);
+    downloadFile('Stock_Movements_Report_' + iso(new Date()) + '.csv', '\ufeff' + toCsv([head, ...data]), 'text/csv;charset=utf-8');
+    toast(`Movement report downloaded (${rows.length} rows)`); return true;
+  } catch (e) { toast('Report failed: ' + e.message, true); return false; }
+}
+
+/* ---- Download / Delete menus ---- */
+function invDownload(kind) { closeInvPops(); return kind === 'stock' ? invExportStock('csv') : invExportMoves(); }
+async function invDeleteData(kind) {
+  closeInvPops(); if (invBusy) return;
+  const label = kind === 'stock' ? 'Stock Report' : 'Stock Movement';
+  const detail = kind === 'stock'
+    ? `This permanently removes ALL inventory items (${invRows.length}: SKUs, stock quantities and product images) and empties the inventory sheet. A CSV backup is saved to your device first.`
+    : 'This permanently removes the whole stock movement history (the log of every stock change). A CSV backup is saved to your device first.';
+  if (!confirm(`Are you sure you want to delete ${label}? This action cannot be undone.\n\n${detail}`)) return;
+  invBusy = true;
+  try {
+    const saved = kind === 'stock' ? await invExportStock('csv', true) : await invExportMoves();   // backup first - nothing is deleted if it fails or there is nothing to delete
+    if (!saved) return;
+    if (kind === 'stock') {
+      const res = await rpc('inventory_delete_all'), warn = [], paths = (res && res.paths) || [];
+      for (let i = 0; i < paths.length; i += 100) { try { await storageRemove(paths.slice(i, i + 100)); } catch (e) { warn.push('some image files were not removed'); break; } }
+      if (getInvUrl()) { try { await invSheet('inv_replaceAll', {items: []}); } catch (e) { warn.push('the inventory sheet was not cleared: ' + e.message); } }
+      toast(`Stock Report deleted (${res.count} item${res.count === 1 ? '' : 's'})` + (warn.length ? ' - but ' + warn.join('; ') : ''), !!warn.length);
+      await invLoad();
+    } else {
+      const n = await rpc('stock_movements_delete_all');
+      toast(`Stock Movement deleted (${n} record${n === 1 ? '' : 's'})`);
+    }
+  } catch (e) { toast('Delete failed: ' + e.message, true); }
+  finally { invBusy = false; }
+}
+
+/* ---- Secondary SKU IDs on the billing form ---- */
+function addSecSku(v) {
+  const d = document.createElement('div'); d.className = 'flex gap-2';
+  d.innerHTML = `<input class="inp sec-sku" list="skuList" placeholder="Secondary SKU ID" autocomplete="off"><button type="button" class="btn btn-ghost !px-3" aria-label="Remove this SKU ID" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>`;
+  if (v) d.firstChild.value = v; $('secSkuList').appendChild(d);
+}
+const secSkus = () => [...document.querySelectorAll('.sec-sku')].map(i => i.value.trim()).filter(Boolean);
+function resetSecSkus() { $('secSkuList').innerHTML = ''; addSecSku(); }
+resetSecSkus();
+
+/* Checks the SECONDARY SKUs against live stock BEFORE any file is uploaded (the database repeats these checks atomically on save).
+   The primary SKU is reference-only and is never checked or deducted. */
+async function invValidateSale(secs) {
+  const seen = new Set();
+  for (const sku of secs) { const k = sku.toLowerCase(); if (seen.has(k)) throw new Error(`SKU "${sku}" is entered twice in the Secondary SKU IDs`); seen.add(k); }
+  if (!secs.length) return;
+  let rows; try { rows = await invFetchAll('inventory?select=sku_id,stock_qty'); } catch (e) { if (e.notSetUp) return; throw e; }
+  const map = new Map(rows.map(r => [String(r.sku_id).trim().toLowerCase(), r]));
+  for (const sku of secs) {
+    const r = map.get(sku.toLowerCase());
+    if (!r) throw new Error(`SKU "${sku}" is not in Inventory. Add it on the Inventory page first.`);
+    if (r.stock_qty < 1) throw new Error(`Not enough stock for ${r.sku_id}: available ${r.stock_qty}, needed 1`);
+  }
+}
+/* ===== INVENTORY END ===== */
+
+/* ===== INVENTORY SHEET CONNECTION START ===== */
+async function invApi(action, extra) {           // talks to the separate inventory Apps Script (never the billing script)
+  const url = getInvUrl(); if (!url) throw new Error('The inventory sheet script URL is not set. Tap the table icon in the top bar and paste it.');
+  let res;
+  try { res = await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action, ...extra})}); }
+  catch (e) { throw new Error('Cannot reach the inventory sheet script. The app is using a URL ending ...' + url.slice(-24) + ' - compare it with the link that works in your browser (table icon > Change script URL).'); }
+  const txt = await res.text(); let j;
+  try { j = JSON.parse(txt); } catch (e) { throw new Error('The inventory script sent a web page, not data. Use the /exec URL, set access to "Anyone", and deploy a New version.'); }
+  if (j && j.expired) throw new Error('The inventory script is still the old login version. Paste the new InventorySheet.gs and deploy a New version.');
+  return j;
+}
+async function invSheet(action, extra) { const r = await invApi(action, extra); if (!r.success) throw new Error(r.error || 'Request failed'); return r; }
+const invSheetItem = x => ({serial_no: x.serial_no, sku_id: x.sku_id, stock_qty: x.stock_qty, image_url: x.image_url || ''});
+const icMsg = (t, bad) => { $('invConnMsg').textContent = t || ''; $('invConnMsg').style.color = bad ? '#ff6b81' : 'var(--mut)'; };
+function icShow(step) { ['icA', 'icC'].forEach(i => $(i).classList.toggle('hidden', i !== step)); }
+async function openInvConn() {
+  icMsg(''); $('icLinkBox').innerHTML = ''; openM('invConnModal');
+  if (!getInvUrl()) { $('icUrl').value = ''; return icShow('icA'); }
+  icShow('icC'); invTest(true);
+}
+function invChangeUrl() { $('icUrl').value = getInvUrl(); icShow('icA'); icMsg(''); }
+async function invSaveUrl() {
+  const u = $('icUrl').value.trim();
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(u)) return icMsg('The URL must start with https://script.google.com/ and end with /exec', true);
+  const prev = localStorage.getItem('shyn_inv_url'); icMsg('Testing...'); localStorage.setItem('shyn_inv_url', u);
+  try { await invSheet('ping'); icMsg('Connected.'); icShow('icC'); invTest(true); invMirrorNow(); }
+  catch (e) { if (prev) localStorage.setItem('shyn_inv_url', prev); else localStorage.removeItem('shyn_inv_url'); icMsg(e.message, true); }
+}
+async function invTest(quiet) {
+  try { const r = await invSheet('inv_ping'); $('icInfo').textContent = `Connected to "${r.spreadsheetName}" - ${r.rows} item${r.rows === 1 ? '' : 's'} in the "${r.sheetName}" tab.`; if (!quiet) icMsg('Connection OK.'); }
+  catch (e) { $('icInfo').textContent = ''; icMsg(e.message, true); }
+}
+async function invOpenSheet() {
+  try { const r = await invSheet('inv_sheetUrl'); const a = document.createElement('a'); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Tap here to open the inventory sheet'; a.style.color = 'var(--cy)'; a.className = 'underline'; $('icLinkBox').replaceChildren(a); }
+  catch (e) { icMsg(e.message, true); }
+}
+
+/* automatic copy of app inventory -> inventory sheet (Supabase stays the source of truth because only it can deduct stock atomically) */
+let invMirrorTimer = null;
+function invMirrorSoon() { if (!getInvUrl()) return; clearTimeout(invMirrorTimer); invMirrorTimer = setTimeout(() => invMirrorNow(), 1200); }
+async function invMirrorNow(manual) {
+  const box = $('invSheetMsg');
+  if (!getInvUrl()) { if (manual) { box.style.color = '#ff6b81'; box.textContent = 'Inventory sheet is not connected. Tap the table icon in the top bar.'; } return; }
+  try {
+    const rows = await invFetchAll('inventory?select=*&order=serial_no.asc');
+    await invSheet('inv_upsert', {items: rows.map(invSheetItem)});
+    box.style.color = 'var(--em)'; box.textContent = 'Inventory sheet updated ' + new Date().toLocaleTimeString('en-IN');
+  } catch (e) { box.style.color = '#ff6b81'; box.textContent = 'Inventory sheet NOT updated: ' + e.message; }
+}
+async function invMirrorDelete(sku) { if (!getInvUrl()) return; try { await invSheet('inv_delete', {sku_id: sku}); $('invSheetMsg').style.color = 'var(--em)'; $('invSheetMsg').textContent = 'Inventory sheet updated ' + new Date().toLocaleTimeString('en-IN'); } catch (e) { $('invSheetMsg').style.color = '#ff6b81'; $('invSheetMsg').textContent = 'Item removed in the app, but NOT in the sheet: ' + e.message; } }
+
+let icBusy = false;
+async function invSyncToSheet() {                // exact copy: sheet rows that are not in the app are removed
+  if (icBusy) return; icBusy = true;
+  try {
+    icMsg('Reading app inventory...');
+    const rows = await invFetchAll('inventory?select=*&order=serial_no.asc');
+    if (!confirm(`Replace EVERYTHING in the inventory sheet with the app inventory (${rows.length} item${rows.length === 1 ? '' : 's'})? Rows you typed only in the sheet will be removed.`)) return icMsg('Cancelled.');
+    icMsg('Writing to the inventory sheet...');
+    const r = await invSheet('inv_replaceAll', {items: rows.map(invSheetItem)});
+    icMsg(`Done. ${r.written} item${r.written === 1 ? '' : 's'} written to the inventory sheet.`); toast('Inventory sheet updated'); invTest(true);
+  } catch (e) { icMsg(e.message, true); }
+  finally { icBusy = false; }
+}
+async function invSyncFromSheet() {
+  if (icBusy) return; icBusy = true;
+  try {
+    icMsg('Reading the inventory sheet...');
+    const [sheet, app] = await Promise.all([invSheet('inv_list'), invFetchAll('inventory?select=*&order=serial_no.asc')]);
+    const byKey = new Map(app.map(r => [String(r.sku_id).trim().toLowerCase(), r])), adds = [], changes = [], bad = [], seen = new Set();
+    for (const x of sheet.items) {
+      const sku = String(x.sku_id == null ? '' : x.sku_id).trim(); if (!sku) continue;
+      const k = sku.toLowerCase();
+      if (!invValidSku(sku) || seen.has(k) || !invValidQty(String(x.stock_qty))) { bad.push(sku); continue; }
+      seen.add(k); const cur = byKey.get(k), q = parseInt(x.stock_qty, 10);
+      if (!cur) adds.push({sku, q}); else if (cur.stock_qty !== q) changes.push({row: cur, from: cur.stock_qty, to: q});
+    }
+    if (!adds.length && !changes.length) return icMsg('Nothing to change - the app already matches the sheet.' + (bad.length ? ` (${bad.length} invalid row(s) skipped)` : ''));
+    const lines = [...adds.slice(0, 5).map(a => `+ ${a.sku}: ${a.q}`), ...changes.slice(0, 5).map(c => `${c.row.sku_id}: ${c.from} -> ${c.to}`)];
+    if (!confirm(`Apply the inventory sheet to the app?\n\n${adds.length} new item(s), ${changes.length} stock change(s)${bad.length ? `, ${bad.length} invalid row(s) skipped` : ''}\n\n${lines.join('\n')}${adds.length + changes.length > 10 ? '\n...' : ''}\n\nStock changes overwrite the current app stock. Items missing from the sheet are NOT deleted.`)) return icMsg('Cancelled.');
+    let ok = 0, fail = 0;
+    for (const a of adds) { try { await rpc('inventory_add_item', {p_sku: a.sku, p_qty: a.q}); ok++; } catch (e) { fail++; } }
+    for (const c of changes) { try { await rpc('inventory_set_stock', {p_serial: c.row.serial_no, p_qty: c.to, p_note: 'Synced from inventory sheet'}); ok++; } catch (e) { fail++; } }
+    await invLoad(true); await invMirrorNow();   // refresh serial numbers in the sheet
+    icMsg(`Applied ${ok} change${ok === 1 ? '' : 's'}${fail ? `, ${fail} failed` : ''}.`, !!fail); toast(fail ? 'Sync finished with errors' : 'App inventory updated from the sheet', !!fail); invTest(true);
+  } catch (e) { icMsg(e.message, true); }
+  finally { icBusy = false; }
+}
+/* ===== INVENTORY SHEET CONNECTION END ===== */
+
+/* ===== DATA SYNC (Supabase <-> billing Google Sheet) START ===== */
+let syncBusy = false;
+const SYNC_CHUNK = 100;                                   // rows per request (Apps Script accepts up to 500, Supabase function up to 500)
+const SYNC_COLS = ['order_id', 'created_at', 'platform', 'customer_name', 'state', 'address', 'invoice_date', 'shipping_date', 'primary_sku', 'secondary_skus', 'payment_type',
+  'customer_price', 'cgst', 'sgst', 'igst', 'original_price', 'sale_price', 'credited_price', 'net_profit', 'notes', 'order_status', 'cancel_reason', 'loss_amount', 'invoice_url', 'packing_image_url'];
+const syncKey = v => String(v == null ? '' : v).trim().toLowerCase();    // the duplicate-proof key: Order ID ignoring case and spaces
+const syncMsg = (t, bad) => { $('syncStatus').textContent = t || ''; $('syncStatus').style.color = bad ? '#ff6b81' : 'var(--mut)'; };
+const syncBar = (done, total) => { $('syncBar').style.width = (total ? Math.min(100, Math.round(done / total * 100)) : 0) + '%'; };
+function syncUi(on) { syncBusy = on; $('syncBtn1').disabled = on; $('syncBtn2').disabled = on; $('syncSpin').classList.toggle('hidden', !on); }
+function syncErr(e) { return e && e.notSetUp ? 'Sync is not installed in Supabase yet. Run sync.sql in the Supabase SQL Editor first.' : (e && e.message) || 'Unknown error'; }
+function syncShow(title, lines, bad) {
+  $('syncResult').innerHTML = `<b style="color:${bad ? '#ff6b81' : 'var(--em)'}">${invEsc(title)}</b>` + lines.map(l => '<br>' + invEsc(l)).join('');
+}
+function sbRowForSheet(r) {                                // a Supabase row -> only the values that really exist
+  const o = {};
+  for (const c of SYNC_COLS) {
+    const v = r[c]; if (v === null || v === undefined || v === '') continue;
+    if (c === 'loss_amount' && Number(v) === 0) continue;  // 0 is the database default, so it means "not set"
+    o[c] = v;
+  }
+  return o;
+}
+async function openSync() { syncMsg('Ready.'); syncBar(0, 0); $('syncResult').innerHTML = ''; openM('syncModal'); syncLoadLast(); }
+async function syncLoadLast() {
+  const box = $('syncLast'); box.textContent = '';
+  try {
+    const res = await fetch(`${SUPA.url}/rest/v1/sync_log?select=*&order=id.desc&limit=30`, {headers: supaHeaders()});
+    if (!res.ok) return;
+    const rows = await res.json(), line = (d, label) => { const r = rows.find(x => x.direction === d); return r ? `${label}: ${new Date(r.created_at).toLocaleString('en-IN')} - ${r.added} added, ${r.updated} updated${r.errors ? ', ' + r.errors + ' error(s)' : ''}` : `${label}: never`; };
+    box.innerHTML = invEsc(line('supabase_to_sheet', 'Last Supabase \u2192 Sheets')) + '<br>' + invEsc(line('sheet_to_supabase', 'Last Sheets \u2192 Supabase'));
+  } catch (e) {}
+}
+async function syncLog(direction, tot, total) {
+  try { await rpc('sync_log_add', {p_direction: direction, p_total: total, p_added: tot.added, p_updated: tot.updated, p_unchanged: tot.unchanged, p_skipped: tot.skipped, p_errors: tot.errors || 0, p_note: null}); } catch (e) {}
+  syncLoadLast();
+}
+
+/* Button 1: Supabase -> Google Sheet */
+async function syncToSheet() {
+  if (syncBusy) return;
+  if (!getUrl()) return toast('Connect the billing Google Sheet first (link menu > Database Google Sheet)', true);
+  syncUi(true); $('syncResult').innerHTML = '';
+  try {
+    syncMsg('Reading orders from Supabase...'); syncBar(0, 0);
+    const sb = await invFetchAll('invoices?select=*&order=id.asc');
+    syncMsg('Reading the Google Sheet...');
+    const sheet = await api('GET', {action: 'syncRead'});
+    if (!sheet.success) throw new Error(sheet.error || 'Could not read the Google Sheet. Update and redeploy Code.gs first.');
+    const have = new Set(sheet.rows.map(r => syncKey(r.order_id))), seen = new Set(), rows = []; let skipped = 0;
+    for (const r of sb) { const k = syncKey(r.order_id); if (!k || seen.has(k)) { skipped++; continue; } seen.add(k); rows.push(sbRowForSheet(r)); }
+    if (!rows.length) { syncMsg('Supabase has no orders to copy.', true); return toast('Nothing to sync - Supabase has no orders', true); }
+    const add = rows.filter(r => !have.has(syncKey(r.order_id))).length, upd = rows.length - add;
+    const basic = sb.length && !('customer_name' in sb[0]);
+    if (!confirm(`Copy ${rows.length} Supabase order(s) to Google Sheets?\n\n- ${add} new row(s) will be added\n- ${upd} existing row(s) will be checked and updated (only fields that have a value)\n- Nothing is deleted${skipped ? `\n- ${skipped} row(s) without a usable Order ID skipped` : ''}${basic ? '\n\nNote: sync.sql has not been run, so only the basic fields are copied.' : ''}`)) return syncMsg('Cancelled.');
+    const tot = {added: 0, updated: 0, unchanged: 0, skipped, errors: 0};
+    for (let i = 0; i < rows.length; i += SYNC_CHUNK) {
+      syncMsg(`Writing to Google Sheets... ${Math.min(i + SYNC_CHUNK, rows.length)} / ${rows.length}`); syncBar(i, rows.length);
+      const r = await api('POST', {action: 'syncUpsertRows', rows: rows.slice(i, i + SYNC_CHUNK)});
+      if (!r.success) throw new Error((r.error || 'The sheet rejected the data') + ` (after ${i} of ${rows.length} rows - safe to run again)`);
+      tot.added += r.added || 0; tot.updated += r.updated || 0; tot.unchanged += r.unchanged || 0; tot.skipped += r.skipped || 0;
+    }
+    syncBar(1, 1); syncMsg('Done.');
+    syncShow('Supabase \u2192 Google Sheets complete', [`${tot.added} added, ${tot.updated} updated, ${tot.unchanged} already up to date`, `${rows.length} order(s) processed${tot.skipped ? ', ' + tot.skipped + ' skipped' : ''}`]);
+    toast(`Synced ${rows.length} orders to Google Sheets: ${tot.added} added, ${tot.updated} updated`);
+    await syncLog('supabase_to_sheet', tot, rows.length); loadOrders();
+  } catch (e) { syncMsg(syncErr(e), true); syncShow('Sync failed', [syncErr(e)], true); toast('Sync failed: ' + syncErr(e), true); }
+  finally { syncUi(false); }
+}
+
+/* Button 2: Google Sheet -> Supabase */
+async function syncFromSheet() {
+  if (syncBusy) return;
+  if (!getUrl()) return toast('Connect the billing Google Sheet first (link menu > Database Google Sheet)', true);
+  syncUi(true); $('syncResult').innerHTML = '';
+  try {
+    syncMsg('Reading the Google Sheet...'); syncBar(0, 0);
+    const sheet = await api('GET', {action: 'syncRead'});
+    if (!sheet.success) throw new Error(sheet.error || 'Could not read the Google Sheet. Update and redeploy Code.gs first.');
+    const rows = sheet.rows || [];
+    if (!rows.length) { syncMsg('The sheet has no orders to import.', true); return toast('Nothing to sync - the sheet has no orders', true); }
+    syncMsg('Reading orders from Supabase...');
+    const known = new Set((await invFetchAll('invoices?select=order_id')).map(r => syncKey(r.order_id)));
+    const add = rows.filter(r => !known.has(syncKey(r.order_id))).length, upd = rows.length - add, dup = sheet.duplicates || 0, blank = sheet.skipped || 0;
+    if (!confirm(`Import ${rows.length} order(s) from Google Sheets into Supabase?\n\n- ${add} new order(s) will be created\n- ${upd} existing order(s) will be updated (only fields that have a value)\n- Nothing is deleted${dup ? `\n- ${dup} repeated Order ID(s) in the sheet: the newest row is used` : ''}${blank ? `\n- ${blank} sheet row(s) without an Order ID skipped` : ''}\n\nImported orders do not change inventory stock.`)) return syncMsg('Cancelled.');
+    const tot = {added: 0, updated: 0, unchanged: 0, skipped: blank, errors: 0}, errs = [];
+    for (let i = 0; i < rows.length; i += SYNC_CHUNK) {
+      syncMsg(`Writing to Supabase... ${Math.min(i + SYNC_CHUNK, rows.length)} / ${rows.length}`); syncBar(i, rows.length);
+      const r = await rpc('sync_upsert_invoices', {p_rows: rows.slice(i, i + SYNC_CHUNK)});
+      tot.added += r.inserted || 0; tot.updated += r.updated || 0; tot.unchanged += r.unchanged || 0; tot.skipped += r.skipped || 0; tot.errors += r.errors || 0;
+      for (const x of (r.error_list || [])) if (errs.length < 10) errs.push(`${x.order_id}: ${x.error}`);
+    }
+    syncBar(1, 1); syncMsg(tot.errors ? 'Finished with errors.' : 'Done.', !!tot.errors);
+    syncShow(tot.errors ? 'Google Sheets \u2192 Supabase finished with errors' : 'Google Sheets \u2192 Supabase complete',
+      [`${tot.added} created, ${tot.updated} updated, ${tot.unchanged} already up to date`, `${rows.length} order(s) processed${tot.skipped ? ', ' + tot.skipped + ' skipped' : ''}`, ...(tot.errors ? [`${tot.errors} row(s) failed:`, ...errs] : [])], !!tot.errors);
+    toast(`Synced ${rows.length} orders to Supabase: ${tot.added} created, ${tot.updated} updated${tot.errors ? `, ${tot.errors} error(s)` : ''}`, !!tot.errors);
+    await syncLog('sheet_to_supabase', tot, rows.length);
+  } catch (e) { syncMsg(syncErr(e), true); syncShow('Sync failed', [syncErr(e)], true); toast('Sync failed: ' + syncErr(e), true); }
+  finally { syncUi(false); }
+}
+/* ===== DATA SYNC END ===== */
+
+/* ============ AMAR: ANALYTICS ENGINE ============ */
+const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'], MN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const dOf = o => String(o['Invoice Date'] || o.Timestamp || '').slice(0, 10);
+const mOf = o => dOf(o).slice(0, 7);
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+function stats(list) {
+  const s = {n: list.length, revenue: 0, cost: 0, profit: 0, credited: 0, tax: 0, pending: 0};
+  list.forEach(o => { s.revenue += num(o['Sale Price']); s.cost += num(o['Original Price']); s.profit += num(o['Net Profit']); s.credited += num(o['Credited Price']); s.tax += num(o.CGST) + num(o.SGST) + num(o.IGST); if (!num(o['Credited Price'])) s.pending++; });
+  s.margin = s.revenue ? s.profit / s.revenue * 100 : 0; s.roi = s.cost ? s.profit / s.cost * 100 : 0; s.avg = s.n ? s.profit / s.n : 0; return s;
+}
+const group = (list, keyFn) => { const g = {}; list.forEach(o => { const k = keyFn(o) || 'Unknown'; (g[k] = g[k] || []).push(o); }); return g; };
+const B = x => `<b>${x}</b>`, tip = x => `<br><i class="tip">Action: ${x}</i>`;
+
+function parseTime(t) {
+  const now = new Date(), y = now.getFullYear(); let m;
+  if ((m = t.match(/(\d{4})-(\d{2})-(\d{2})/))) return {from: m[0], to: m[0], label: m[0]};
+  if ((m = t.match(/\b(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})\b/))) { const d = `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`; return {from: d, to: d, label: d}; }
+  const mre = '(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+  if ((m = t.match(new RegExp('\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?' + mre + '\\b(?:\\s+(\\d{4}))?')))) {
+    const mi = MONTHS.indexOf(m[2].slice(0, 3)), d = `${m[3] || y}-${String(mi + 1).padStart(2, '0')}-${m[1].padStart(2, '0')}`; return {from: d, to: d, label: m[1] + ' ' + MN[mi] + ' ' + (m[3] || y)};
+  }
+  if ((m = t.match(new RegExp('\\b' + mre + '\\b(?:\\s+(\\d{4}))?'))) && (m[1] !== 'may' || /\b(in|of|for|during)\s+may\b|may\s+\d{4}/.test(t))) {
+    const mi = MONTHS.indexOf(m[1].slice(0, 3)), yy = m[2] || y, p = `${yy}-${String(mi + 1).padStart(2, '0')}`; return {from: p + '-01', to: p + '-31', label: MN[mi] + ' ' + yy};
+  }
+  if (/today/.test(t)) return {from: iso(now), to: iso(now), label: 'today'};
+  if (/yesterday/.test(t)) { const d = new Date(now - 864e5); return {from: iso(d), to: iso(d), label: 'yesterday'}; }
+  if (/this month/.test(t)) { const p = iso(now).slice(0, 7); return {from: p + '-01', to: p + '-31', label: 'this month'}; }
+  if (/last month/.test(t)) { const d = new Date(y, now.getMonth() - 1, 1), p = iso(d).slice(0, 7); return {from: p + '-01', to: p + '-31', label: 'last month'}; }
+  if (/this week/.test(t)) return {from: iso(new Date(now - 6 * 864e5)), to: iso(now), label: 'the last 7 days'};
+  if ((m = t.match(/last (\d+) days/))) return {from: iso(new Date(now - m[1] * 864e5)), to: iso(now), label: `the last ${m[1]} days`};
+  if (/this year/.test(t)) return {from: y + '-01-01', to: y + '-12-31', label: 'this year'};
+  return null;
+}
+const DIMS = [[/platform|marketplace|channel/, 'Platform', 'platform'], [/state|region|location/, 'State', 'state'], [/sku|product|item|design|selling/, 'SKU ID', 'SKU'],
+  [/month|trend|timeline/, 'month', 'month'], [/payment|cod\b|prepaid/, 'Payment Type', 'payment type'], [/customer|buyer/, 'Customer Name', 'customer']];
+const keyOf = dim => dim === 'month' ? mOf : o => o[dim];
+const METRICS = {revenue: ['revenue', 'sales'], profit: ['profit', 'net profit'], margin: ['margin', 'profit margin'], roi: ['ROI', 'ROI'], cost: ['cost', 'cost'], n: ['orders', 'orders'], avg: ['avg profit/order', 'average profit per order'], credited: ['credited', 'credited amount'], tax: ['tax', 'GST collected']};
+const fv = (k, v) => k === 'n' ? String(Math.round(v)) : (k === 'margin' || k === 'roi') ? v.toFixed(1) + '%' : money(v);
+
+function detectMetric(t) {
+  if (/margin/.test(t)) return 'margin'; if (/\broi\b|return on/.test(t)) return 'roi';
+  if (/average|avg|mean|per order/.test(t)) return 'avg';
+  if (/profit|earn|made|net|income|loss/.test(t)) return 'profit';
+  if (/credited|received|bank|settle/.test(t)) return 'credited';
+  if (/cost|spent|invest|purchase price|original/.test(t)) return 'cost';
+  if (/\btax|gst/.test(t)) return 'tax';
+  if (/best.?sell|how many|count|number of|orders?|units|most popular|demand/.test(t)) return 'n';
+  if (/revenue|sales|sale|sold|turnover|business/.test(t)) return 'revenue';
+  return null;
+}
+function ask(text) {
+  text = (text || '').trim(); if (!text) return; say(text.replace(/</g, '&lt;'), true);
+  const d = say('<span class="dots"><span></span><span></span><span></span></span>');
+  setTimeout(() => { let out; try { out = think(text); } catch (e) { out = {html: 'I hit a problem reading that. Try rephrasing the question.'}; } d.innerHTML = out.html; if (out.chart) out.chart(d); $('chat').scrollTop = 1e6; }, 450);
+}
+function say(html, me) { const d = document.createElement('div'); d.className = 'bub ' + (me ? 'me' : 'bot'); d.innerHTML = html; $('chat').appendChild(d); $('chat').scrollTop = 1e6; return d; }
+function intro() {
+  return `I'm ${B('AMAR &mdash; SHYNWELL Store &amp; Seller Assistant')}. I work directly on your live order sheet. My core capabilities:<br>&bull; ${B('Account &amp; Inventory Insights')}: sales, profit, SKU demand and restock signals<br>&bull; ${B('Platform Margin Analysis')}: Amazon vs Meesho vs Flipkart<br>&bull; ${B('Reconciliation &amp; Settlement Guidance')}: pending credits and payout follow-ups<br>&bull; ${B('Profit Optimization')}: pricing, COD risk and loss-making orders<br>Ask in plain words, request a chart, or say "PDF report" / "Excel report" for an instant download.`;
+}
+function greet() { if ($('chat').children.length) return; say(`Hello ARSHAD. ` + intro()); }
+
+function think(text) {
+  const t = text.toLowerCase().replace(/[?!,]/g, ' '), all = orders;
+  if (/^(hi|hello|hey|namaste|salaam)\b/.test(t) && t.length < 20) return {html: 'Hello ARSHAD. What would you like to know about SHYNWELL today?'};
+  if (/\b(thanks|thank you|shukriya)\b/.test(t)) return {html: 'Always happy to help. I am here whenever you need numbers.'};
+  if (/who are you|your name|what can you do|capabilit|introduce|what do you do|^help$/.test(t)) return {html: intro()};
+  if (/download|export|excel|xlsx|spreadsheet|pdf|report/.test(t) && !/chart|graph|margin|platform/.test(t)) {
+    const x = /excel|xlsx|spreadsheet/.test(t), p = /pdf/.test(t) || !x;
+    if (x) exportXlsx(); if (p) exportPdf();
+    return {html: `Preparing your ${x && p ? 'Excel and PDF' : x ? 'Excel' : 'PDF'} report now, covering ${B(orders.length + ' orders')}.`};
+  }
+  if (!all.length) return {html: 'There are no orders yet. Add your first order and I can start analysing.'};
+
+  // ---- filters ----
+  let list = all, filt = [];
+  const tr = parseTime(t); if (tr) { list = list.filter(o => dOf(o) >= tr.from && dOf(o) <= tr.to); filt.push(tr.label); }
+  const uniq = k => [...new Set(all.map(o => String(o[k] || '')).filter(Boolean))].sort((a, b) => b.length - a.length);
+  const hit = (k, minLen = 2) => uniq(k).filter(v => v.length >= minLen && new RegExp('(^|[^a-z0-9])' + v.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)').test(t));
+  const plats = hit('Platform'), states = hit('State'), skus = hit('SKU ID', 3);
+  const cmp = plats.length > 1 || /\bvs\b|versus|compare|comparison/.test(t);
+  if (plats.length) { list = list.filter(o => plats.includes(o.Platform)); filt.push(plats.join(' & ')); }
+  if (states.length) { list = list.filter(o => states.includes(o.State)); filt.push(states.join(' & ')); }
+  if (skus.length) { list = list.filter(o => skus.includes(o['SKU ID'])); filt.push('SKU ' + skus.join(', ')); }
+  if (/\bcod\b/.test(t) && !/fail|rto|return|cancel/.test(t)) { list = list.filter(o => o['Payment Type'] === 'COD'); filt.push('COD'); }
+  if (/prepaid/.test(t)) { list = list.filter(o => o['Payment Type'] === 'Prepaid'); filt.push('Prepaid'); }
+  const where = filt.length ? ' for ' + filt.join(', ') : '';
+  if (!list.length) return {html: `I found no orders${where}. Try a different date, state or platform.`};
+
+  // ---- special intents ----
+  if (/fail|rto|return|cancel/.test(t) && /cod|rate|rto|return|cancel|fail/.test(t)) {
+    const base = list.filter(o => o['Payment Type'] === 'COD'), bad = base.filter(o => /rto|return|cancel|fail|refus/i.test((o.Notes || '') + ' ' + (o['Order Status'] || '')));
+    if (!base.length) return {html: `No COD orders${where}.`};
+    const rate = bad.length / base.length * 100, pend = base.filter(o => !num(o['Credited Price'])).length;
+    return {html: `Among ${B(base.length + ' COD orders')}${where}, ${B(bad.length)} are marked failed/returned in notes: a ${B(rate.toFixed(1) + '%')} failure rate. ${B(pend)} COD orders still have no credited amount.` + tip(rate > 15 ? 'COD failure is high. Confirm COD orders by phone/WhatsApp before dispatch and push prepaid with a small discount.' : 'COD risk looks healthy. Keep adding "RTO" or "Returned" in Notes so I can track failures accurately.')};
+  }
+  if (/\bhow\b.*(reconcil|settle)|settlement guide|reconciliation guide|what is reconciliation/.test(t)) return {html: guide(list)};
+  if (/pending|not credited|uncredited|unsettled|reconcil|outstanding|settlement/.test(t)) {
+    const p = list.filter(o => !num(o['Credited Price'])), val = p.reduce((s, o) => s + num(o['Sale Price']), 0);
+    if (!p.length) return {html: `Every order${where} is reconciled. No pending credits.`};
+    const pg = Object.entries(group(p, o => o.Platform)).map(([k, v]) => `${k}: ${B(v.length)} (${money(v.reduce((s, o) => s + num(o['Sale Price']), 0))})`).join(' | ');
+    const oldest = [...p].sort((a, b) => dOf(a).localeCompare(dOf(b))).slice(0, 5).map(o => `${o['Order ID']} (${dOf(o)}, ${o.Platform})`).join('<br>');
+    return {html: `${B(p.length)} of ${list.length} orders${where} (${B((p.length / list.length * 100).toFixed(0) + '%')}) await credited-price reconciliation, about ${B(money(val))} in sales.<br>${pg}<br>Oldest pending:<br>${oldest}` + tip('Match these against each marketplace settlement report, then enter the credited amount in Order Lookup. Chase anything older than the platform payout window.')};
+  }
+  if (/loss|losing|negative/.test(t)) {
+    const l = list.filter(o => num(o['Net Profit']) < 0).sort((a, b) => num(a['Net Profit']) - num(b['Net Profit']));
+    return {html: l.length ? `${B(l.length)} order(s)${where} are at a loss, totalling ${B(money(l.reduce((s, o) => s + num(o['Net Profit']), 0)))}. Worst: ${l.slice(0, 3).map(o => `${o['Order ID']} (${money(o['Net Profit'])}, ${o.Platform})`).join('; ')}.` + tip('Check pricing and platform fees on these SKUs.') : `No loss-making orders${where}. Every order is in profit.`};
+  }
+  const wantsChart = /chart|graph|pie|plot|visual|share|breakdown|trend|distribution/.test(t);
+  const dimHit = DIMS.find(d => d[0].test(t)) || null;
+  let metric = detectMetric(t);
+  if (/margin analysis|platform (margin|comparison|performance|report|wise)|compare (all )?platforms/.test(t) && !wantsChart) return platformReport(list, where);
+  if (/inventory|stock|reorder|restock|sku (performance|insight)|slow.?moving/.test(t)) return inventoryReport(list, where);
+
+  if (/summary|overview|insight|\bhow\b.*(business|doing|going)|status|snapshot|advice|suggest/.test(t) && !wantsChart && !dimHit) return overview(list, where);
+
+  // ---- chart ----
+  if (wantsChart) {
+    const dim = dimHit ? dimHit[1] : 'Platform', m = metric && metric !== 'n' ? metric : (/share|split|distribution/.test(t) ? 'revenue' : (/profit/.test(t) ? 'profit' : 'revenue'));
+    return makeChart(list, dim, m, /share|pie|distribution|split/.test(t) && dim !== 'month', where);
+  }
+
+  // ---- grouped / ranking / comparison ----
+  const rank = /highest|top|best|most|lowest|least|worst|weakest|rank|which|biggest|max|min/.test(t), grouped = /\b(by|per|each|wise|across)\b/.test(t);
+  if (dimHit && (rank || grouped || cmp) || (cmp && plats.length > 1)) {
+    const dim = dimHit ? dimHit[1] : 'Platform', label = dimHit ? dimHit[2] : 'platform';
+    if (!metric) metric = /selling|demand|popular/.test(t) ? 'n' : 'profit';
+    const g = group(list, keyOf(dim)), rows = Object.entries(g).map(([k, v]) => ({k, s: stats(v)}));
+    const low = /lowest|least|worst|weakest|min/.test(t), key = metric;
+    rows.sort((a, b) => dim === 'month' && !rank ? a.k.localeCompare(b.k) : low ? a.s[key] - b.s[key] : b.s[key] - a.s[key]);
+    const top = rows[0], more = rows.slice(0, 6).map(r => `${r.k}: ${B(fv(key, r.s[key]))} (${r.s.n} orders, margin ${r.s.margin.toFixed(1)}%, uncredited ${(r.s.pending / r.s.n * 100).toFixed(0)}%)`).join('<br>');
+    let a = `${low ? 'Lowest' : 'Top'} ${label}${where}: ${B(top.k)} with ${B(fv(key, top.s[key]))} ${METRICS[key][1]}.<br>${more}`;
+    if (cmp && rows.length > 1) { const best = [...rows].sort((x, y) => y.s.margin - x.s.margin)[0]; a += tip(`${best.k} earns the best margin (${best.s.margin.toFixed(1)}%). Push more stock and ads there. ` + sellerTips(list).join(' ')); }
+    else if (dim === 'State') a += tip(`Run targeted ads and faster delivery in ${top.k}; check COD returns in the lowest states before spending.`);
+    else if (dim === 'SKU ID') a += tip(`Keep ${top.k} well stocked and bundle it with slower SKUs.`);
+    else { const st = sellerTips(list); a += tip(st.length ? st.join(' ') : `Double down on ${top.k}; review fees on the lower channels.`); }
+    return {html: a};
+  }
+
+  // ---- single metric ----
+  if (metric) {
+    const s = stats(list); let a;
+    if (metric === 'n') a = `${B(s.n + ' orders')}${where}, worth ${B(money(s.revenue))} in sales.`;
+    else a = `${METRICS[metric][1][0].toUpperCase() + METRICS[metric][1].slice(1)}${where}: ${B(fv(metric, s[metric]))} across ${s.n} orders.`;
+    a += `<br>Profit ${B(money(s.profit))} | margin ${B(s.margin.toFixed(1) + '%')} | ROI ${B(s.roi.toFixed(1) + '%')}`;
+    if (s.pending) a += tip(`${s.pending} order(s) still have no credited amount. Reconcile them for exact profit.`);
+    else if (s.margin < 15) a += tip('Margin is thin. Revisit cost price or raise the sale price on low-margin SKUs.');
+    { const st = sellerTips(list); if (!/Action:/.test(a) && st.length) a += tip(st.join(' ')); }
+    return {html: a};
+  }
+  // specific order / customer lookup by words
+  const idHit = all.find(o => t.includes(String(o['Order ID']).toLowerCase()) || (String(o['Customer Name']).length > 3 && t.includes(String(o['Customer Name']).toLowerCase())));
+  if (idHit) { const o = idHit; return {html: `Order ${B(o['Order ID'])}: ${o['Customer Name']}, ${o.State}, ${o.Platform} (${o['Payment Type']}), SKU ${o['SKU ID']}.<br>Sale ${money(o['Sale Price'])} | Cost ${money(o['Original Price'])} | Credited ${money(o['Credited Price'])} | Profit ${B(money(o['Net Profit']))}.`}; }
+  if (filt.length) { const s = stats(list); return {html: `${B(s.n + ' orders')}${where}: sales ${B(money(s.revenue))}, profit ${B(money(s.profit))}, margin ${B(s.margin.toFixed(1) + '%')}.`}; }
+  return overview(all, '');
+}
+function guide(list) {
+  const p = list.filter(o => !num(o['Credited Price'])).length;
+  return `${B('Reconciliation &amp; settlement guide')}:<br>1. Download the settlement/payment report from Amazon Seller Central, the Meesho supplier panel or Flipkart Seller Hub.<br>2. Match each Order ID to the amount actually credited to your bank.<br>3. Enter it as Credited Price in Order Lookup. ${B('Net Profit = Credited - Original Price')}.<br>4. Investigate gaps: returns, RTO, commission or shipping deductions.<br>You currently have ${B(p)} order(s) awaiting this.`;
+}
+function sellerTips(list) {
+  const tips = [];
+  Object.entries(group(list, o => o.Platform)).forEach(([k, v]) => {
+    const s = stats(v), unc = v.length ? s.pending / v.length * 100 : 0, loss = v.filter(o => num(o['Net Profit']) < 0).length;
+    if (v.length >= 3 && unc >= 25) tips.push(`Your uncredited rate on ${k} is ${unc.toFixed(0)}%. Follow up on settlements and check for returns or deductions.`);
+    if (v.length >= 3 && s.margin < 12) tips.push(`${k} margin is only ${s.margin.toFixed(1)}%. Consider revising customer pricing or SKU packing costs.`);
+    if (loss) tips.push(`${loss} loss-making ${k} order(s). Review fees and cost price.`);
+  });
+  return tips.slice(0, 3);
+}
+function platformReport(list, where) {
+  const rows = Object.entries(group(list, o => o.Platform)).map(([k, v]) => ({k, s: stats(v)})).sort((a, b) => b.s.margin - a.s.margin);
+  const lines = rows.map(r => `${B(r.k)}: ${r.s.n} orders | sales ${money(r.s.revenue)} | profit ${money(r.s.profit)} | margin ${r.s.margin.toFixed(1)}% | avg/order ${money(r.s.avg)} | uncredited ${(r.s.pending / r.s.n * 100).toFixed(0)}%`).join('<br>');
+  const tp = sellerTips(list);
+  return {html: `Platform margin analysis${where}:<br>${lines}` + tip(tp.length ? tp.join(' ') : `${rows[0].k} gives the best margin. Shift ad spend and stock there.`)};
+}
+function inventoryReport(list, where) {
+  const from = iso(new Date(Date.now() - 30 * 864e5));
+  const rows = Object.entries(group(list, o => o['SKU ID'])).map(([k, v]) => ({k, n: v.length, r30: v.filter(o => dOf(o) >= from).length, p: stats(v).profit})).sort((a, b) => b.r30 - a.r30 || b.n - a.n);
+  const slow = rows.filter(r => r.r30 === 0).slice(0, 4).map(r => r.k);
+  return {html: `SKU demand${where} (I only see order velocity, not stock counts):<br>${rows.slice(0, 6).map(r => `${B(r.k)}: ${r.n} orders (${r.r30} in last 30 days), profit ${money(r.p)}`).join('<br>')}` +
+    tip(`Keep ${rows[0].k} well stocked and reorder early.${slow.length ? ' No sales in 30 days for ' + slow.join(', ') + ': consider a discount or bundle.' : ''}`)};
+}
+function overview(list, where) {
+  const s = stats(list), pg = Object.entries(group(list, o => o.Platform)).map(([k, v]) => ({k, s: stats(v)})).sort((a, b) => b.s.profit - a.s.profit);
+  const sg = Object.entries(group(list, o => o.State)).map(([k, v]) => ({k, s: stats(v)})).sort((a, b) => b.s.n - a.s.n);
+  const kg = Object.entries(group(list, o => o['SKU ID'])).map(([k, v]) => ({k, n: v.length})).sort((a, b) => b.n - a.n);
+  const cod = list.filter(o => o['Payment Type'] === 'COD').length / list.length * 100;
+  let a = `Business snapshot${where}:<br>${B(s.n)} orders | sales ${B(money(s.revenue))} | profit ${B(money(s.profit))} | margin ${B(s.margin.toFixed(1) + '%')}<br>Best platform: ${B(pg[0].k)} (${money(pg[0].s.profit)} profit). Top state by orders: ${B(sg[0].k)}. Best-selling SKU: ${B(kg[0].k)} (${kg[0].n} orders). COD share: ${B(cod.toFixed(0) + '%')}.`;
+  const tips = []; if (s.pending) tips.push(`reconcile ${s.pending} order(s) with no credited amount`); if (cod > 60) tips.push('COD share is high, so push prepaid offers to cut RTO risk'); if (s.margin < 15) tips.push('margin is thin, so review cost prices'); if (pg.length > 1) tips.push(`shift ad budget toward ${pg[0].k}`);
+  sellerTips(list).forEach(x => tips.push(x.replace(/\.$/, ''))); return {html: a + (tips.length ? tip(tips.slice(0, 4).join('; ') + '.') : '')};
+}
+function makeChart(list, dim, metric, pie, where) {
+  const g = group(list, keyOf(dim)), rows = Object.entries(g).map(([k, v]) => ({k, v: stats(v)[metric]})).sort((a, b) => dim === 'month' ? a.k.localeCompare(b.k) : b.v - a.v).slice(0, dim === 'month' ? 24 : 10);
+  const title = `${METRICS[metric][1][0].toUpperCase() + METRICS[metric][1].slice(1)} by ${dim === 'month' ? 'month' : dim.toLowerCase()}${where}`;
+  const pal = ['#00ff88', '#00e5ff', '#ffb703', '#a855f7', '#ff6b81', '#5eead4', '#f472b6', '#facc15', '#60a5fa', '#34d399'];
+  return {html: `${B(title)}<canvas style="margin-top:8px" height="${pie ? 220 : 200}"></canvas>`, chart: d => {
+    const type = pie ? 'doughnut' : dim === 'month' ? 'line' : 'bar', labels = rows.map(r => r.k), data = rows.map(r => +r.v.toFixed(2));
+    charts.push(new Chart(d.querySelector('canvas'), {type, data: {labels, datasets: [{label: title, data, backgroundColor: pie || type === 'bar' ? pal : 'rgba(0,255,136,.2)', borderColor: type === 'line' ? '#00ff88' : '#0a0a0f', borderWidth: type === 'line' ? 2 : 1, fill: type === 'line', tension: .35}]},
+      options: {responsive: true, plugins: {legend: {display: pie, labels: {color: '#e8ecf4'}}}, scales: pie ? {} : {x: {ticks: {color: '#8a93a6'}, grid: {display: false}}, y: {ticks: {color: '#8a93a6'}, grid: {color: 'rgba(255,255,255,.07)'}}}}}));
+  }};
+}
+function toggleAmar() { $('drawer').classList.toggle('open'); if ($('drawer').classList.contains('open')) { loadOrders(); greet(); } }
+
+/* ============ EXPORTS (with CDN fallbacks) ============ */
+async function ensure(test, srcs) { if (test()) return true; for (const s of srcs) { try { await loadScript(s); if (test()) return true; } catch (e) {} } return false; }
+const COLS = ['Timestamp', 'Order ID', 'Platform', 'Customer Name', 'State', 'Invoice Date', 'SKU ID', 'Payment Type', 'Customer Price', 'CGST', 'SGST', 'IGST', 'Original Price', 'Sale Price', 'Credited Price', 'Net Profit', 'Notes'];
+const NUMC = ['Customer Price', 'CGST', 'SGST', 'IGST', 'Original Price', 'Sale Price', 'Credited Price', 'Net Profit'];
+async function exportXlsx() {
+  if (!orders.length) return toast('No orders to export yet', true);
+  if (!await ensure(() => window.XLSX, ['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'])) return toast('Excel library failed to load. Check internet.', true);
+  const L = c => XLSX.utils.encode_col(COLS.indexOf(c)), n = orders.length, last = n + 1, s = stats(orders);
+  const rows = [COLS, ...orders.map(o => COLS.map(c => NUMC.includes(c) ? num(o[c]) : (o[c] == null ? '' : o[c])))];
+  const ws = XLSX.utils.aoa_to_sheet(rows), tr = n + 3;
+  const put = (r, c, v) => ws[XLSX.utils.encode_cell({r, c})] = v;
+  put(tr - 1, 0, {t: 's', v: 'Total Revenue (Sale Price)'}); put(tr - 1, 1, {t: 'n', f: `SUM(${L('Sale Price')}2:${L('Sale Price')}${last})`, v: s.revenue});
+  put(tr, 0, {t: 's', v: 'Total Cost (Original Price)'}); put(tr, 1, {t: 'n', f: `SUM(${L('Original Price')}2:${L('Original Price')}${last})`, v: s.cost});
+  put(tr + 1, 0, {t: 's', v: 'Total Net Profit'}); put(tr + 1, 1, {t: 'n', f: `SUM(${L('Net Profit')}2:${L('Net Profit')}${last})`, v: s.profit});
+  ws['!ref'] = XLSX.utils.encode_range({r: 0, c: 0}, {r: tr + 1, c: COLS.length - 1});
+  ws['!cols'] = COLS.map(c => ({wch: c === 'Notes' ? 30 : c === 'Customer Name' ? 22 : 15})); ws['!freeze'] = {xSplit: 0, ySplit: 1};
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Orders');
+  const sm = XLSX.utils.aoa_to_sheet([['SHYNWELL JEWELLERY - SALES REPORT'], ['Owner: ARSHAD'], [], ['Metric', 'Value'],
+    ['Total Orders', {t: 'n', f: `COUNTA(Orders!B2:B${last})`, v: n}], ['Total Revenue', {t: 'n', f: `SUM(Orders!${L('Sale Price')}2:${L('Sale Price')}${last})`, v: s.revenue}],
+    ['Total Cost', {t: 'n', f: `SUM(Orders!${L('Original Price')}2:${L('Original Price')}${last})`, v: s.cost}], ['Total Net Profit', {t: 'n', f: `SUM(Orders!${L('Net Profit')}2:${L('Net Profit')}${last})`, v: s.profit}]]);
+  sm['!cols'] = [{wch: 28}, {wch: 20}]; XLSX.utils.book_append_sheet(wb, sm, 'Summary');
+  XLSX.writeFile(wb, 'SHYNWELL_Report_' + iso(new Date()) + '.xlsx'); toast('Excel report downloaded');
+}
+async function exportPdf() {
+  if (!orders.length) return toast('No orders to export yet', true);
+  const ok = await ensure(() => window.jspdf, ['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js']) &&
+    await ensure(() => window.jspdf && new window.jspdf.jsPDF().autoTable, ['https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js']);
+  if (!ok) return toast('PDF library failed to load. Check internet.', true);
+  const doc = new window.jspdf.jsPDF({orientation: 'landscape', unit: 'pt', format: 'a4'}), W = doc.internal.pageSize.getWidth(), s = stats(orders), r = n => 'Rs ' + n.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  doc.setFillColor(10, 10, 15); doc.rect(0, 0, W, 78, 'F'); doc.setFillColor(255, 183, 3); doc.rect(0, 78, W, 3, 'F');
+  doc.setTextColor(255, 183, 3); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text('SHYNWELL JEWELLERY - EXECUTIVE SALES REPORT', 36, 38);
+  doc.setTextColor(0, 255, 136); doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.text('Generated for: Owner: ARSHAD   |   ' + new Date().toLocaleDateString('en-IN'), 36, 60);
+  const cards = [['Total Orders', String(s.n), [0, 168, 90]], ['Total Revenue', r(s.revenue), [0, 150, 190]], ['Net Profit', r(s.profit), [214, 140, 0]]], cw = (W - 72 - 24) / 3;
+  cards.forEach((c, i) => { const x = 36 + i * (cw + 12); doc.setFillColor(...c[2]); doc.roundedRect(x, 98, cw, 56, 8, 8, 'F'); doc.setTextColor(255); doc.setFontSize(10); doc.text(c[0], x + 14, 118); doc.setFontSize(17); doc.setFont('helvetica', 'bold'); doc.text(c[1], x + 14, 142); doc.setFont('helvetica', 'normal'); });
+  const head = ['Date', 'Order ID', 'Platform', 'Customer', 'State', 'SKU', 'Pay', 'Cost', 'Sale', 'Credited', 'Net Profit'];
+  doc.autoTable({startY: 172, head: [head], theme: 'striped', margin: {left: 36, right: 36},
+    body: orders.map(o => [dOf(o), o['Order ID'], o.Platform, o['Customer Name'], o.State, o['SKU ID'], o['Payment Type'], num(o['Original Price']).toFixed(2), num(o['Sale Price']).toFixed(2), num(o['Credited Price']).toFixed(2), num(o['Net Profit']).toFixed(2)]),
+    styles: {fontSize: 8, cellPadding: 4}, headStyles: {fillColor: [10, 10, 15], textColor: [255, 183, 3]}, alternateRowStyles: {fillColor: [236, 248, 242]},
+    columnStyles: {7: {halign: 'right'}, 8: {halign: 'right'}, 9: {halign: 'right'}, 10: {halign: 'right', fontStyle: 'bold'}},
+    didDrawPage: d => { doc.setFontSize(8); doc.setTextColor(120); doc.text('SHYNWELL - Premium Covering Jewellery | Page ' + doc.internal.getNumberOfPages(), 36, doc.internal.pageSize.getHeight() - 16); }});
+  doc.save('SHYNWELL_Report_' + iso(new Date()) + '.pdf'); toast('PDF report downloaded');
+}
+</script>
+</body>
+</html>
